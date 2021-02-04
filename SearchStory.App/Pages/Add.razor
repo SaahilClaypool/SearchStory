@@ -1,0 +1,28 @@
+@page "/Add"
+
+<h1>Add Document</h1>
+
+<button class="btn btn-primary" @onclick="AddDocument">Click me</button>
+
+<InputFile OnChange="@OnFileChange" />
+
+@code {
+    [Inject]
+    AddDocument DocumentAdder { get; set; }
+
+    [Inject]
+    ILogger<Add> Logger { get; set; }
+
+    public void AddDocument()
+    {
+        DocumentAdder.Exectute(new());
+    }
+
+    public async Task OnFileChange(InputFileChangeEventArgs args)
+    {
+        var fileName = args.File.Name;
+        await args.File.OpenReadStream(maxAllowedSize: 1_000_000_000)
+            .CopyToAsync(System.IO.File.Open(fileName, System.IO.FileMode.Create));
+        Logger.LogInformation($"Created file {fileName}");
+    }
+}

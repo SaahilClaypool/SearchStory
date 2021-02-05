@@ -1,0 +1,29 @@
+@page "/All"
+@using System.IO;
+
+<h1>All</h1>
+
+@if(Data is not null)
+{
+    @foreach (var fileInfo in Data)
+    {
+        <div>
+        @fileInfo.Name
+    </div>
+    }
+}
+@code {
+    [Inject]
+    ListDocuments ListDocuments { get; set; }
+
+    [Inject]
+    ILogger<Add> Logger { get; set; }
+
+
+    IEnumerable<FileInfo>? Data = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Data = (await ListDocuments.Exectute(new())).Files;
+    }
+}

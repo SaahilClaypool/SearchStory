@@ -31,13 +31,14 @@ namespace SearchStory.App
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-            services.AddScoped<Configuration>();
+            services.AddScoped<DirectoryService>();
             services.AddUseCases();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            new DirectoryService().EnsurePathsExist();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -1,4 +1,5 @@
 @page "/Add"
+@using System.IO;
 
 <h1>Add Document</h1>
 
@@ -13,16 +14,29 @@
     [Inject]
     ILogger<Add> Logger { get; set; }
 
+    [Inject]
+    DirectoryService Dirs { get; set; }
+
+    string? NewFilePath = null;
+
     public void AddDocument()
     {
-        DocumentAdder.Exectute(new());
+        Console.WriteLine("Clicked");
+        Logger.LogInformation($"{NewFilePath}");
+        if (NewFilePath is not null)
+        {
+            DocumentAdder.Exectute(new(NewFilePath));
+        }
     }
 
     public async Task OnFileChange(InputFileChangeEventArgs args)
     {
-        var fileName = args.File.Name;
-        await args.File.OpenReadStream(maxAllowedSize: 1_000_000_000)
-            .CopyToAsync(System.IO.File.Open(fileName, System.IO.FileMode.Create));
+        var fileName = Dirs.TempDir.FullName + args.File.Name;
+        using var outputFile = System.IO.File.OpenWrite(fileName);
+        await args.File
+            .OpenReadStream(maxAllowedSize: 1_000_000_000)
+            .CopyToAsync(outputFile);
         Logger.LogInformation($"Created file {fileName}");
+        NewFilePath = fileName;
     }
 }

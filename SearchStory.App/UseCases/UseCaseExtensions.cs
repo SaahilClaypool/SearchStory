@@ -10,6 +10,7 @@ namespace SearchStory.App.UseCases
         public static IServiceCollection AddUseCases(this IServiceCollection collection)
         {
             collection.AddScoped<AddDocument>();
+            collection.AddScoped<ListDocuments>();
             return collection;
         }
     }

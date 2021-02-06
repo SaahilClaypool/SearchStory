@@ -36,9 +36,18 @@ namespace SearchStory.App.Services
             if (!DataDir.Exists)
             {
                 DataDir.Create();
-                new DirectoryInfo(IndexPath).Create();
-                new DirectoryInfo(DocumentPath).Create();
-                new DirectoryInfo(TempPath).Create();
+            }
+            if (!IndexDir.Exists)
+            {
+                IndexDir.Create();
+            }
+            if (!DocumentDir.Exists)
+            {
+                DocumentDir.Create();
+            }
+            if (!TempDir.Exists)
+            {
+                TempDir.Create();
             }
         }
     }

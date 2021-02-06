@@ -1,6 +1,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using SearchStory.App.Search;
 using SearchStory.App.Services;
 
 namespace SearchStory.App.UseCases
@@ -11,11 +12,13 @@ namespace SearchStory.App.UseCases
         public record Response();
         public ILogger<AddDocument> Logger { get; }
         public DirectoryService DirService { get; }
+        public LuceneWriter SearchIndex { get; }
 
-        public AddDocument(ILogger<AddDocument> logger, DirectoryService configuration)
+        public AddDocument(ILogger<AddDocument> logger, DirectoryService configuration, LuceneWriter searchIndex)
         {
             Logger = logger;
             DirService = configuration;
+            SearchIndex = searchIndex;
         }
 
         /// <summary>
@@ -25,9 +28,10 @@ namespace SearchStory.App.UseCases
         /// <returns></returns>
         public async Task<Response> Exectute(Command input)
         {
-            var fileName = DirService.DocumentDir.FullName + Path.GetFileName(input.NewFileName);
-            Logger.LogInformation($"Moving {input.NewFileName} to {fileName}");
-            File.Copy(input.NewFileName, fileName, overwrite: true);
+            var file = new FileInfo(DirService.DocumentDir.FullName + Path.GetFileName(input.NewFileName));
+            Logger.LogInformation($"Moving {input.NewFileName} to {file}");
+            File.Copy(input.NewFileName, file.ToString(), overwrite: true);
+            await SearchIndex.AddFile(file);
             return new();
         }
     }

@@ -1,0 +1,40 @@
+<div>
+    SearchBox
+    <div>
+        <input type="text" @oninput="OnInput" />
+    </div>
+    <div>
+        @if(Results is not null)
+        {
+            foreach(var result in Results)
+            {
+                <div>
+                    <strong>@result.Filename</strong>
+                    <ul>
+                        @foreach(var token in result.HighlightedSnippets)
+                        {
+                           <p>@((MarkupString)token)</p>
+                        }
+                    </ul>
+                </div>
+            }
+        }
+    </div>
+    <style>
+        @* Using inline style here because the html is raw from backend *@
+        .highlight {
+            background-color: yellow;
+        }
+    </style>
+</div>
+
+@code {
+    [Inject] LuceneReader Reader { get; set; }
+    private string SearchTerm = "";
+    private IEnumerable<LuceneReader.SearchResult>? Results = null;
+    private void OnInput(ChangeEventArgs ev)
+    {
+        Console.WriteLine(ev.Value);
+        Results = Reader.Search(ev.Value.ToString());
+    }
+}

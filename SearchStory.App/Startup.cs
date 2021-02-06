@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SearchStory.App.Data;
+using SearchStory.App.Search;
 using SearchStory.App.Services;
 using SearchStory.App.UseCases;
 
@@ -31,7 +32,10 @@ namespace SearchStory.App
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
-            services.AddScoped<DirectoryService>();
+            services.AddSingleton<DirectoryService>();
+            // singleton to re-use between searches
+            services.AddScoped<LuceneWriter>();
+            services.AddScoped<LuceneReader>();
             services.AddUseCases();
         }
 

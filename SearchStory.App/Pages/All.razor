@@ -1,7 +1,7 @@
 @page "/All"
 @using System.IO;
 
-<h1>All</h1>
+<h1>All @Dirs.DocumentDir.FullName</h1>
 
 @if(Data is not null)
 {
@@ -13,12 +13,11 @@
     }
 }
 @code {
-    [Inject]
-    ListDocuments ListDocuments { get; set; }
+    [Inject] ListDocuments ListDocuments { get; set; }
 
-    [Inject]
-    ILogger<Add> Logger { get; set; }
+    [Inject] public DirectoryService Dirs { get; set; }
 
+    [Inject] ILogger<Add> Logger { get; set; }
 
     IEnumerable<FileInfo>? Data = null;
 

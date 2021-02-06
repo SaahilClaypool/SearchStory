@@ -3,7 +3,7 @@
 
 <h1>Add Document</h1>
 
-<button class="btn btn-primary" @onclick="AddDocument">Click me</button>
+<button class="btn btn-primary" @onclick="AddDocument">Index</button>
 
 <InputFile OnChange="@OnFileChange" />
 
@@ -19,13 +19,13 @@
 
     string? NewFilePath = null;
 
-    public void AddDocument()
+    public async Task AddDocument()
     {
         Console.WriteLine("Clicked");
         Logger.LogInformation($"{NewFilePath}");
         if (NewFilePath is not null)
         {
-            DocumentAdder.Exectute(new(NewFilePath));
+            await DocumentAdder.Exectute(new(NewFilePath));
         }
     }
 

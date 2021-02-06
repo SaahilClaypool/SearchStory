@@ -11,3 +11,4 @@ NoAuth if in local mode.
 
 
 
+![Example](./example.gif)

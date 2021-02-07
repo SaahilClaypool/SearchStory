@@ -1,8 +1,6 @@
 @page "/All"
 @using System.IO;
 
-<h1>All @Dirs.DocumentDir.FullName</h1>
-
 @if(Data is not null)
 {
     @foreach (var fileInfo in Data)

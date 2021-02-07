@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using SearchStory.App.Data;
 using SearchStory.App.Search;
@@ -56,6 +58,13 @@ namespace SearchStory.App
 
             // app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseStaticFiles(options: new()
+            {
+                FileProvider = new PhysicalFileProvider(
+                    new DirectoryService().DocumentDir.FullName
+                ),
+                RequestPath = "/Document"
+            });
 
             app.UseRouting();
 

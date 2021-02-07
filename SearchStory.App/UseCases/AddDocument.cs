@@ -30,7 +30,7 @@ namespace SearchStory.App.UseCases
         {
             var file = new FileInfo(DirService.DocumentDir.FullName + Path.GetFileName(input.NewFileName));
             Logger.LogInformation($"Moving {input.NewFileName} to {file}");
-            File.Copy(input.NewFileName, file.ToString(), overwrite: true);
+            File.Move(input.NewFileName, file.ToString(), overwrite: true);
             await SearchIndex.AddFile(file);
             return new();
         }

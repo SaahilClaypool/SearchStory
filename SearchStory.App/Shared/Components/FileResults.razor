@@ -1,5 +1,7 @@
 <div class="card mt-1" style="max-width: 80ch">
-    <h5 class="card-header">@Result.BaseName</h5>
+    <a href=@($"Document/{Result.BaseName}") target="_blank">
+        <h5 class="card-header">@Result.BaseName</h5>
+    </a>
     <div class="card-body">
         <ul>
             @foreach (var token in Result.HighlightedSnippets)

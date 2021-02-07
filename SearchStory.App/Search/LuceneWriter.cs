@@ -38,7 +38,7 @@ namespace SearchStory.App.Search
                 };
                 using var writer = GetIndexWriter();
                 var (key, doc, disposables) = transformer.Transform(file);
-                writer.AddDocument(doc);
+                writer.UpdateDocument(new Term(LuceneDocument.PATH, doc.Get(LuceneDocument.PATH)), doc);
                 foreach (var d in disposables)
                 {
                     d.Dispose();
@@ -48,9 +48,10 @@ namespace SearchStory.App.Search
             });
         }
 
-        public Task RemoveFile(FileInfo file)
+        public async Task RemoveFile(FileInfo file)
         {
-            throw new System.NotImplementedException();
+            using var writer = GetIndexWriter();
+            writer.DeleteDocuments(new Term(LuceneDocument.PATH, file.FullName));
         }
 
         public IndexWriter GetIndexWriter()

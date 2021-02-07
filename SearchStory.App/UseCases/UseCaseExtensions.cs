@@ -11,6 +11,7 @@ namespace SearchStory.App.UseCases
         {
             collection.AddScoped<AddDocument>();
             collection.AddScoped<ListDocuments>();
+            collection.AddScoped<ClearAll>();
             return collection;
         }
     }

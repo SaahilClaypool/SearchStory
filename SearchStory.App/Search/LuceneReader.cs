@@ -62,7 +62,7 @@ namespace SearchStory.App.Search
             var hits = searcher.Search(query, PAGE_SIZE);
             // Highlighter highlighter = new(new QueryScorer(query));
             Highlighter highlighter = new(new SimpleHTMLFormatter("<B class='highlight'>", "</B>"), new QueryScorer(query));
-            highlighter.TextFragmenter = new SimpleFragmenter(120);
+            highlighter.TextFragmenter = new SimpleFragmenter(40);
             for (int i = 0; i < hits.ScoreDocs.Length; i++)
             {
                 var doc = reader.Document(hits.ScoreDocs[i].Doc);

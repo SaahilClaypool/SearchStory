@@ -1,8 +1,6 @@
 @page "/Add"
 @using System.IO;
 
-<h1>Add Document</h1>
-
 <button class="btn btn-primary" @onclick="AddDocument">Index</button>
 
 <InputFile OnChange="@OnFileChange" />
@@ -17,26 +15,25 @@
     [Inject]
     DirectoryService Dirs { get; set; }
 
-    string? NewFilePath = null;
+    IBrowserFile? NewFile = null;
 
     public async Task AddDocument()
     {
-        Console.WriteLine("Clicked");
-        Logger.LogInformation($"{NewFilePath}");
-        if (NewFilePath is not null)
+        if (NewFile is not null)
         {
-            await DocumentAdder.Exectute(new(NewFilePath));
+            var localFilePath = Dirs.TempDir.FullName + NewFile.Name;
+            using(var localFile = System.IO.File.OpenWrite(localFilePath))
+            {
+                await NewFile
+                    .OpenReadStream(maxAllowedSize: 1_000_000_000)
+                    .CopyToAsync(localFile);
+            }
+            await DocumentAdder.Exectute(new(localFilePath));
         }
     }
 
     public async Task OnFileChange(InputFileChangeEventArgs args)
     {
-        var fileName = Dirs.TempDir.FullName + args.File.Name;
-        using var outputFile = System.IO.File.OpenWrite(fileName);
-        await args.File
-            .OpenReadStream(maxAllowedSize: 1_000_000_000)
-            .CopyToAsync(outputFile);
-        Logger.LogInformation($"Created file {fileName}");
-        NewFilePath = fileName;
+        NewFile = args.File;
     }
 }

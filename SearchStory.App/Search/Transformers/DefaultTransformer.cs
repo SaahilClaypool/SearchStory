@@ -15,6 +15,7 @@ namespace SearchStory.App.Search.Transformers
     {
         public (string Key, Document Document, IEnumerable<IDisposable> Disposables) Transform(FileInfo file)
         {
+            Console.WriteLine($"Default Transform for {file.Extension.ToLower()}");
             FileStream fs = new(file.FullName, FileMode.Open, FileAccess.Read);
             // I wonder if I should make a document type to encapsulate this...
             var doc = new Document()

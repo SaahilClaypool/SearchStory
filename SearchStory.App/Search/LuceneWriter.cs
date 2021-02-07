@@ -32,12 +32,8 @@ namespace SearchStory.App.Search
         {
             return Task.Run(() =>
             {
-                var transformer = file.Extension switch
-                {
-                    _ => new DefaultTransformer()
-                };
                 using var writer = GetIndexWriter();
-                var (key, doc, disposables) = transformer.Transform(file);
+                var (key, doc, disposables) = new Transformer().Transform(file);
                 writer.UpdateDocument(new Term(LuceneDocument.PATH, doc.Get(LuceneDocument.PATH)), doc);
                 foreach (var d in disposables)
                 {

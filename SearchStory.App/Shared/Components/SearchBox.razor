@@ -9,13 +9,7 @@
             foreach(var result in Results)
             {
                 <div>
-                    <strong>@result.Filename</strong>
-                    <ul>
-                        @foreach(var token in result.HighlightedSnippets)
-                        {
-                           <p>@((MarkupString)token)</p>
-                        }
-                    </ul>
+                    <FileResults Result=@result />
                 </div>
             }
         }

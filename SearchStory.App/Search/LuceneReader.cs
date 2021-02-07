@@ -30,7 +30,14 @@ namespace SearchStory.App.Search
             Logger = logger;
         }
 
-        public record SearchResult(string Filename, IEnumerable<string> HighlightedSnippets);
+        public record SearchResult(string Filename, IEnumerable<string> HighlightedSnippets)
+        {
+            /// <summary>
+            ///  TODO: make this work with web pages
+            /// </summary>
+            /// <returns></returns>
+            public string BaseName => Path.GetFileName(Filename);
+        };
 
         /// <summary>
         /// TODO: add search order parameter

@@ -1,0 +1,14 @@
+<div class="card mt-1" style="max-width: 80ch">
+    <h5 class="card-header">@Result.BaseName</h5>
+    <div class="card-body">
+        <ul>
+            @foreach (var token in Result.HighlightedSnippets)
+            {
+                <li>@((MarkupString)token)</li>
+            }
+        </ul>
+    </div>
+</div>
+@code {
+    [Parameter] public LuceneReader.SearchResult Result { get; set; }
+}

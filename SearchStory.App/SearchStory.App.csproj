@@ -9,6 +9,7 @@
     <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta00013" />
     <PackageReference Include="Lucene.Net.Highlighter" Version="4.8.0-beta00013" />
     <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00013" />
+    <PackageReference Include="PdfPig" Version="0.1.4" />
   </ItemGroup>
 
 </Project>

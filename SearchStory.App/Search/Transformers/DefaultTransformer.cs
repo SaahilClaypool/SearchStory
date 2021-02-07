@@ -11,7 +11,7 @@ namespace SearchStory.App.Search.Transformers
     /// Useful if the file is already text-like.
     /// Files like PDF will need their contents cleaned.
     /// </summary>
-    public class DefaultTransformer : ITransformer
+    public class TextTransformer : ITransformer
     {
         public (string Key, Document Document, IEnumerable<IDisposable> Disposables) Transform(FileInfo file)
         {

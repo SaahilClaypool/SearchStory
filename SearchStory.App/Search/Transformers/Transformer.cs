@@ -12,7 +12,7 @@ namespace SearchStory.App.Search.Transformers
             => file.Extension.ToLower() switch
             {
                 ".pdf" => new PDFTransformer().Transform(file),
-                _ => new DefaultTransformer().Transform(file)
+                _ => new TextTransformer().Transform(file)
             };
     }
 }

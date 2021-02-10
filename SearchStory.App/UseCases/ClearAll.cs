@@ -33,9 +33,10 @@ namespace SearchStory.App.UseCases
             var dir = DirService.DocumentDir;
             foreach (var file in dir.GetFiles())
             {
-                using var writer = Writer.RemoveFile(file);
+                await Writer.RemoveFile(file);
                 file.Delete();
             }
+            await Writer.RemoveAll();
 
             return new();
         }

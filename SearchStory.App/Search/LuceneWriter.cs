@@ -44,10 +44,29 @@ namespace SearchStory.App.Search
             });
         }
 
+        public Task AddWebpage(string localFilename, string url, string textContent)
+        {
+            return Task.Run(() =>
+            {
+                using var writer = GetIndexWriter();
+                var localFile = new FileInfo(localFilename);
+                var doc = LuceneDocument.Web(localFilename, textContent, url);
+                writer.UpdateDocument(new Term(LuceneDocument.PATH, doc.Get(LuceneDocument.PATH)), doc);
+                writer.Flush(true, true);
+                Logger.LogInformation($"Flushed index to {writer.Directory}");
+            });
+        }
+
         public async Task RemoveFile(FileInfo file)
         {
             using var writer = GetIndexWriter();
             writer.DeleteDocuments(new Term(LuceneDocument.PATH, file.FullName));
+        }
+
+        public async Task RemoveAll()
+        {
+            using var writer = GetIndexWriter();
+            writer.DeleteAll();
         }
 
         public IndexWriter GetIndexWriter()

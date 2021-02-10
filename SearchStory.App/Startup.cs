@@ -38,6 +38,7 @@ namespace SearchStory.App
             // singleton to re-use between searches
             services.AddScoped<LuceneWriter>();
             services.AddScoped<LuceneReader>();
+            services.AddControllers();
             services.AddUseCases();
         }
 
@@ -70,6 +71,7 @@ namespace SearchStory.App
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });

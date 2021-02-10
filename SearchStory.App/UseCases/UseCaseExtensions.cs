@@ -12,6 +12,7 @@ namespace SearchStory.App.UseCases
             collection.AddScoped<AddDocument>();
             collection.AddScoped<ListDocuments>();
             collection.AddScoped<ClearAll>();
+            collection.AddScoped<AddWebpage>();
             return collection;
         }
     }

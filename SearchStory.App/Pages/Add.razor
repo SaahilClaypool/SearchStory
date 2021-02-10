@@ -3,7 +3,7 @@
 
 <button class="btn btn-primary" @onclick="AddDocument">Index</button>
 
-<InputFile OnChange="@OnFileChange" />
+<InputFile multiple OnChange="@OnFileChange" />
 
 @code {
     [Inject]
@@ -15,25 +15,37 @@
     [Inject]
     DirectoryService Dirs { get; set; }
 
-    IBrowserFile? NewFile = null;
+    IEnumerable<IBrowserFile>? NewFiles = null;
 
     public async Task AddDocument()
     {
-        if (NewFile is not null)
+        if (NewFiles is not null)
         {
-            var localFilePath = Dirs.TempDir.FullName + NewFile.Name;
-            using(var localFile = System.IO.File.OpenWrite(localFilePath))
+            foreach (var newFile in NewFiles)
             {
-                await NewFile
-                    .OpenReadStream(maxAllowedSize: 1_000_000_000)
-                    .CopyToAsync(localFile);
+                var localFilePath = Dirs.TempDir.FullName + newFile.Name;
+                Console.WriteLine($"Writing {localFilePath}\n");
+                using (var localFile = System.IO.File.OpenWrite(localFilePath))
+                {
+                    await newFile
+                        .OpenReadStream(maxAllowedSize: 1_000_000_000)
+                        .CopyToAsync(localFile);
+                }
+                Console.WriteLine($"Adding to index {localFilePath}\n");
+                await DocumentAdder.Exectute(new(localFilePath));
             }
-            await DocumentAdder.Exectute(new(localFilePath));
+            NewFiles = null;
         }
     }
 
-    public async Task OnFileChange(InputFileChangeEventArgs args)
+    public void OnFileChange(InputFileChangeEventArgs args)
     {
-        NewFile = args.File;
+        const int MAX_COUNT = 15;
+        if (args.FileCount > MAX_COUNT)
+        {
+            Console.WriteLine($"Error: too many files entered - max is {15}");
+            return;
+        }
+        NewFiles = args.GetMultipleFiles(15);
     }
 }

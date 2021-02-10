@@ -19,6 +19,8 @@ namespace SearchStory.App.Search
     public class LuceneReader
     {
         private const int PAGE_SIZE = 10;
+        private const int FragmentSize = 80;
+
         public DirectoryService DirectoryService { get; }
         public LuceneWriter Writer { get; }
         public ILogger<LuceneReader> Logger { get; }
@@ -46,13 +48,23 @@ namespace SearchStory.App.Search
         /// <param name="term">query to search lucene index for</param>
         public IEnumerable<SearchResult> Search(string term)
         {
-            if (term == "") yield break;
+            if (term == "") return new List<SearchResult>();
             // using var reader = Writer.IndexWriter.GetReader(applyAllDeletes: false);
             using var reader = DirectoryReader.Open(FSDirectory.Open(DirectoryService.IndexDir));
             var searcher = new IndexSearcher(reader);
 
-            Logger.LogInformation($"number of docs: {reader.NumDocs}");
+            try
+            {
+                return DoQuery(reader, searcher, term).ToList();
+            }
+            catch
+            {
+                return new List<SearchResult>();
+            }
+        }
 
+        private IEnumerable<SearchResult> DoQuery(IndexReader reader, IndexSearcher searcher, string term)
+        {
             var query = Parser.Parse(term);
             Analyzer analyzer = new StandardAnalyzer(LuceneVersion.LUCENE_48);
             System.Console.WriteLine($"Term is {term}");
@@ -62,7 +74,7 @@ namespace SearchStory.App.Search
             var hits = searcher.Search(query, PAGE_SIZE);
             // Highlighter highlighter = new(new QueryScorer(query));
             Highlighter highlighter = new(new SimpleHTMLFormatter("<B class='highlight'>", "</B>"), new QueryScorer(query));
-            highlighter.TextFragmenter = new SimpleFragmenter(40);
+            highlighter.TextFragmenter = new SimpleFragmenter(FragmentSize);
             for (int i = 0; i < hits.ScoreDocs.Length; i++)
             {
                 var doc = reader.Document(hits.ScoreDocs[i].Doc);
@@ -73,6 +85,7 @@ namespace SearchStory.App.Search
                 var result = highlighter.GetBestFragments(tokenStream, doc.Get(LuceneDocument.CONTENTS), maxNumFragmentsRequired, fragmentSeparator);
                 yield return new(doc.Get(LuceneDocument.PATH), result.Split(fragmentSeparator));
             }
+
         }
 
         private QueryParser _Parser;

@@ -6,15 +6,15 @@ using SearchStory.App.Services;
 
 namespace SearchStory.App.UseCases
 {
-    public class AddDocument : IUseCase<AddDocument.Command, AddDocument.Response>
+    public class AddWebpage : IUseCase<AddWebpage.Command, AddWebpage.Response>
     {
-        public record Command(string NewFileName);
+        public record Command(string NewFileName, string Url);
         public record Response();
-        public ILogger<AddDocument> Logger { get; }
+        public ILogger<AddWebpage> Logger { get; }
         public DirectoryService DirService { get; }
         public LuceneWriter SearchIndex { get; }
 
-        public AddDocument(ILogger<AddDocument> logger, DirectoryService configuration, LuceneWriter searchIndex)
+        public AddWebpage(ILogger<AddWebpage> logger, DirectoryService configuration, LuceneWriter searchIndex)
         {
             Logger = logger;
             DirService = configuration;

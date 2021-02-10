@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Ardalis.ApiEndpoints" Version="2.0.0" />
     <PackageReference Include="Lucene.Net" Version="4.8.0-beta00013" />
     <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta00013" />
     <PackageReference Include="Lucene.Net.Highlighter" Version="4.8.0-beta00013" />

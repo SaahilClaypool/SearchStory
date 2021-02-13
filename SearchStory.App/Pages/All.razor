@@ -6,8 +6,10 @@
     @foreach (var fileInfo in Data)
     {
         <div>
-        @fileInfo.Name
-    </div>
+            <a href=@($"Document/{fileInfo.Name}") target="_blank">
+                <h5 class="card-header">@fileInfo.Name</h5>
+            </a>
+        </div>
     }
 }
 @code {

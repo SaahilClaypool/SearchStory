@@ -1,0 +1,20 @@
+@implements IDisposable
+@code {
+    [CascadingParameter]
+    public virtual StateContainer State { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        if (State != null)
+        {
+            State.OnChange += StateHasChanged;
+        }
+    }
+
+    public void Dispose()
+    {
+        if (State != null)
+        {
+            State.OnChange -= StateHasChanged;
+        }
+    }
+}

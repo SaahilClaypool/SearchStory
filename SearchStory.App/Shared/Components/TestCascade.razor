@@ -1,0 +1,9 @@
+@inherits ReactiveComponent
+
+@State.Value.Test
+
+<input type="text" @oninput="UpdateText" />
+
+@code {
+    void UpdateText(ChangeEventArgs ev) => State.Update(() => State.Value.Test = ev.Value.ToString());
+}

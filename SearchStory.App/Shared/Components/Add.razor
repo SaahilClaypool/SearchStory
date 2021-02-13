@@ -1,9 +1,10 @@
-@page "/Add"
 @using System.IO;
 
-<button class="btn btn-primary" @onclick="AddDocument">Index</button>
+<div>
+    <InputFile multiple OnChange="@OnFileChange" />
+    <button class="btn btn-primary" @onclick="AddDocument">Index</button>
+</div>
 
-<InputFile multiple OnChange="@OnFileChange" />
 
 @code {
     [Inject]

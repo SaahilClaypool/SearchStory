@@ -5,21 +5,11 @@
     </button>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
+<div class="@NavMenuCssClass flex-column" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column flex-fill">
         <li class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="Search">
-                <span class="oi oi-list-rich" aria-hidden="true"></span>Search
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="Add">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Add Document
             </NavLink>
         </li>
         <li class="nav-item px-3">

@@ -1,0 +1,11 @@
+<button class="btn btn-danger">
+    Clear Index
+</button>
+
+@code {
+    [Inject] ClearAll ClearAll { get; set; }
+    public void Clear()
+    {
+        ClearAll.Exectute(new());
+    }
+}

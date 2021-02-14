@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.ApiEndpoints;
 using HtmlAgilityPack;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using SearchStory.App.Search;
@@ -15,6 +16,7 @@ using SearchStory.App.UseCases;
 
 namespace SearchStory.App.API
 {
+    [EnableCors("LocalBrowser")]
     public class AddPageFromBrowser : BaseAsyncEndpoint<AddPageFromBrowser.TRequest, AddPageFromBrowser.TResponse>
     {
         public record TRequest(string Url, string Content);

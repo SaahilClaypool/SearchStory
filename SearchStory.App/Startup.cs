@@ -40,6 +40,14 @@ namespace SearchStory.App
             services.AddScoped<LuceneReader>();
             services.AddControllers();
             services.AddUseCases();
+            services.AddCors(o => o.AddPolicy("LocalBrowser", builder =>
+            {
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .WithMethods(new string[] { "POST" });
+
+            }));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +76,8 @@ namespace SearchStory.App
             });
 
             app.UseRouting();
+
+            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {

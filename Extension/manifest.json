@@ -1,0 +1,52 @@
+{
+  "name": "SearchStory Bridge",
+  "description": "Sends a readable version of the page to the SearchStory local server",
+  "version": "0.1.0",
+  "manifest_version": 2,
+  "permissions": [
+    "activeTab",
+    "notifications"
+  ],
+  "optional_permissions": [
+    "*://*/*",
+    "webNavigation"
+  ],
+  "background": {
+    "persist": false,
+    "scripts": [
+      "action.js",
+      "common.js"
+    ]
+  },
+  "page_action": {
+    "browser_style": true,
+    "show_matches": [
+      "http://*/*",
+      "https://*/*",
+      "file://*/*"
+    ],
+    "default_icon": {
+      "16": "data/icons/16.png",
+      "32": "data/icons/32.png",
+      "48": "data/icons/48.png"
+    }
+  },
+  "icons": {
+    "16": "data/icons/16.png",
+    "32": "data/icons/32.png",
+    "48": "data/icons/48.png",
+    "64": "data/icons/64.png",
+    "128": "data/icons/128.png",
+    "256": "data/icons/256.png",
+    "512": "data/icons/512.png"
+  },
+  "commands": {
+    "_execute_browser_action": {},
+    "send-to-server": {
+      "description": "sends reader view to configured server",
+      "suggested_key": {
+        "default": "Alt+V"
+      }
+    }
+  }
+}

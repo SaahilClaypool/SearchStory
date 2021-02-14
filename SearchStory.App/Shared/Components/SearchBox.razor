@@ -3,9 +3,9 @@
         <input type="text" @oninput="OnInput" placeholder="type to search" />
     </div>
     <div>
-        @if(Results is not null)
+        @if (Results is not null)
         {
-            foreach(var result in Results)
+            foreach (var result in Results)
             {
                 <div>
                     <FileResults Result=@result />
@@ -14,9 +14,23 @@
         }
     </div>
     <style>
-        @* Using inline style here because the html is raw from backend *@
-        .highlight {
-            background-color: yellow;
+        @*Usinginlinestyleherebecausethehtmlisrawfrombackend*@.highlight {
+            animation-duration: 0.9s;
+            animation-name: fadein;
+            background-color: #5a7d9a33;
+            border-radius: 5px;
+            padding: 3px;
+        }
+
+        @@keyframes fadein {
+            from {
+                background-color: transparent;
+            }
+
+            to {
+                background-color: #5a7d9a33;
+            }
+        }
         }
     </style>
 </div>

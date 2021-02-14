@@ -30,6 +30,7 @@ namespace SearchStory.App.UseCases
         /// <returns></returns>
         public async Task<Response> Exectute(Command input)
         {
+            Logger.LogWarning("Clearing all!");
             var dir = DirService.DocumentDir;
             foreach (var file in dir.GetFiles())
             {

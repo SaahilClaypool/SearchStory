@@ -1,11 +1,11 @@
-<button class="btn btn-danger">
+<button class="btn btn-danger" @onclick="Clear">
     Clear Index
 </button>
 
 @code {
     [Inject] ClearAll ClearAll { get; set; }
-    public void Clear()
+    public async Task Clear()
     {
-        ClearAll.Exectute(new());
+        await ClearAll.Exectute(new());
     }
 }

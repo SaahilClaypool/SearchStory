@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Ardalis.ApiEndpoints;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +16,7 @@ using SearchStory.App.UseCases;
 namespace SearchStory.App.API
 {
     [EnableCors("LocalBrowser")]
-    public class AddPageFromBrowser : BaseAsyncEndpoint<AddPageFromBrowser.TRequest, AddPageFromBrowser.TResponse>
+    public class AddPageFromBrowser : ControllerBase
     {
         public record TRequest(string Url, string Content, string Title);
         public record TResponse();
@@ -35,7 +34,7 @@ namespace SearchStory.App.API
         }
 
         [HttpPost("/api/browser")]
-        public override async Task<ActionResult<TResponse>> HandleAsync(
+        public async Task<ActionResult<TResponse>> HandleAsync(
             [FromBody] TRequest request,
             CancellationToken cancellationToken = default
         )

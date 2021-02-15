@@ -8,6 +8,7 @@ using Lucene.Net.Util;
 using SearchStory.App.Search.Transformers;
 using Microsoft.Extensions.Logging;
 using System;
+using Lucene.Net.Analysis.En;
 
 namespace SearchStory.App.Search
 {
@@ -68,7 +69,7 @@ namespace SearchStory.App.Search
         public IndexWriter GetIndexWriter()
         {
             var dir = FSDirectory.Open(DirectoryService.IndexDir);
-            var analyzer = new StandardAnalyzer(LuceneVersion.LUCENE_48);
+            var analyzer = new EnglishAnalyzer(LuceneVersion.LUCENE_48);
             var iwc = new IndexWriterConfig(LuceneVersion.LUCENE_48, analyzer)
             {
                 OpenMode = OpenMode.CREATE_OR_APPEND

@@ -15,13 +15,14 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text.Json;
 using System;
+using Lucene.Net.Analysis.En;
 
 namespace SearchStory.App.Search
 {
     public class LuceneReader
     {
-        private const int PAGE_SIZE = 10;
-        private const int FragmentSize = 80;
+        private const int NUMBER_OF_FRAGMENTS = 7;
+        private const int FRAGMENT_SIZE = 80;
 
         public DirectoryService DirectoryService { get; }
         public LuceneWriter Writer { get; }
@@ -68,20 +69,19 @@ namespace SearchStory.App.Search
         private IEnumerable<SearchResult> DoQuery(IndexReader reader, IndexSearcher searcher, string term)
         {
             var query = Parser.Parse(term);
-            Analyzer analyzer = new StandardAnalyzer(LuceneVersion.LUCENE_48);
             System.Console.WriteLine($"Term is {term}");
 
 
             // todo make search after for proper paging
-            var hits = searcher.Search(query, PAGE_SIZE);
+            var hits = searcher.Search(query, NUMBER_OF_FRAGMENTS);
             Highlighter highlighter = new(new SimpleHTMLFormatter("<B class='highlight'>", "</B>"), new QueryScorer(query));
-            highlighter.TextFragmenter = new SimpleFragmenter(FragmentSize);
+            highlighter.TextFragmenter = new SimpleFragmenter(FRAGMENT_SIZE);
             for (int i = 0; i < hits.ScoreDocs.Length; i++)
             {
                 var doc = reader.Document(hits.ScoreDocs[i].Doc);
                 int maxFragments = 10;
                 var fragments = highlighter.GetBestFragments(
-                        analyzer,
+                        Parser.Analyzer,
                         LuceneDocument.CONTENTS,
                         doc.Get(LuceneDocument.CONTENTS),
                         maxFragments
@@ -101,7 +101,7 @@ namespace SearchStory.App.Search
             {
                 if (_Parser is null)
                 {
-                    _Parser = new QueryParser(LuceneVersion.LUCENE_48, LuceneDocument.CONTENTS, new StandardAnalyzer(LuceneVersion.LUCENE_48));
+                    _Parser = new QueryParser(LuceneVersion.LUCENE_48, LuceneDocument.CONTENTS, new EnglishAnalyzer(LuceneVersion.LUCENE_48));
                 }
                 return _Parser;
             }

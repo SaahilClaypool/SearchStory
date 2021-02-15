@@ -3,9 +3,14 @@
 </button>
 
 @code {
+    [Inject] IJSRuntime JSRuntime { get; set; }
     [Inject] ClearAll ClearAll { get; set; }
     public async Task Clear()
     {
+        if (!await JSRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to clear *all* indexed files?"))
+        {
+            return;
+        }
         await ClearAll.Execute(new());
     }
 }

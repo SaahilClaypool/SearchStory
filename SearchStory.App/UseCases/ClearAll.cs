@@ -23,11 +23,6 @@ namespace SearchStory.App.UseCases
             Writer = writer;
         }
 
-        /// <summary>
-        /// TODO: add to index
-        /// </summary>
-        /// <param name="input"></param>
-        /// <returns></returns>
         public async Task<Response> Execute(Command input)
         {
             Logger.LogWarning("Clearing all!");

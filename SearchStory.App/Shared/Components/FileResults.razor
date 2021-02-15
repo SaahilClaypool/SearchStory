@@ -1,4 +1,4 @@
-<div class="card mt-1" style="max-width: 80ch">
+<div class="card mt-1">
     <div class="card-header  d-flex flex-row align-items-center">
         <a class="flex-grow-1" href=@($"Document/{Result.BasePath}") target="_blank">
             <h5>@Result.BaseName</h5>
@@ -12,10 +12,10 @@
         }
     </div>
     <div class="card-body">
-        <ul>
+        <ul class="list group list-group-flush">
             @foreach (var token in Result.HighlightedSnippets)
             {
-                <li>@((MarkupString)token)</li>
+                <li class="list-group-item">@((MarkupString)token)</li>
             }
         </ul>
         <footer class="blockquote-footer">@Result.LastWrite.ToShortDateString()</footer>

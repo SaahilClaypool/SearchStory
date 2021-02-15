@@ -33,7 +33,7 @@
                         .CopyToAsync(localFile);
                 }
                 Console.WriteLine($"Adding to index {localFilePath}\n");
-                await DocumentAdder.Exectute(new(localFilePath));
+                await DocumentAdder.Execute(new(localFilePath));
             }
             NewFiles = null;
         }

@@ -23,6 +23,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Data = (await ListDocuments.Exectute(new())).Files;
+        Data = (await ListDocuments.Execute(new())).Files;
     }
 }

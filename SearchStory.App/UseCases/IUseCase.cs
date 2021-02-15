@@ -4,6 +4,6 @@ namespace SearchStory.App.UseCases
 {
     public interface IUseCase<Command, Response>
     {
-        Task<Response> Exectute(Command input);
+        Task<Response> Execute(Command input);
     }
 }

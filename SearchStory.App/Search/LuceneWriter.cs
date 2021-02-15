@@ -32,15 +32,12 @@ namespace SearchStory.App.Search
         {
             return Task.Run(() =>
             {
-                using var writer = GetIndexWriter();
                 var (key, doc, disposables) = new Transformer().Transform(file);
-                writer.UpdateDocument(new Term(LuceneDocument.PATH, doc.Get(LuceneDocument.PATH)), doc);
+                Write(doc);
                 foreach (var d in disposables)
                 {
                     d.Dispose();
                 }
-                writer.Flush(true, true);
-                Logger.LogInformation($"Flushed index to {writer.Directory}");
             });
         }
 
@@ -48,25 +45,24 @@ namespace SearchStory.App.Search
         {
             return Task.Run(() =>
             {
-                using var writer = GetIndexWriter();
                 var localFile = new FileInfo(localFilename);
                 var doc = LuceneDocument.Web(localFilename, textContent, url);
-                writer.UpdateDocument(new Term(LuceneDocument.PATH, doc.Get(LuceneDocument.PATH)), doc);
-                writer.Flush(true, true);
-                Logger.LogInformation($"Flushed index to {writer.Directory}");
+                Write(doc);
             });
         }
 
-        public async Task RemoveFile(FileInfo file)
+        public Task RemoveFile(FileInfo file)
         {
             using var writer = GetIndexWriter();
             writer.DeleteDocuments(new Term(LuceneDocument.PATH, file.FullName));
+            return Task.CompletedTask;
         }
 
-        public async Task RemoveAll()
+        public Task RemoveAll()
         {
             using var writer = GetIndexWriter();
             writer.DeleteAll();
+            return Task.CompletedTask;
         }
 
         public IndexWriter GetIndexWriter()
@@ -79,5 +75,14 @@ namespace SearchStory.App.Search
             };
             return new(dir, iwc);
         }
+
+        private void Write(Lucene.Net.Documents.Document doc)
+        {
+            using var writer = GetIndexWriter();
+            writer.UpdateDocument(new Term(LuceneDocument.PATH, doc.Get(LuceneDocument.PATH)), doc);
+            writer.Flush(true, true);
+            Logger.LogInformation($"Flushed index to {writer.Directory}");
+        }
+
     }
 }

@@ -2,12 +2,13 @@
 @code {
     [CascadingParameter]
     public virtual StateContainer State { get; set; }
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
         if (State != null)
         {
             State.OnChange += StateHasChanged;
         }
+        return Task.CompletedTask;
     }
 
     public void Dispose()

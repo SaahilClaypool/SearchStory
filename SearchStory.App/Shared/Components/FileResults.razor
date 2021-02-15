@@ -1,7 +1,16 @@
 <div class="card mt-1" style="max-width: 80ch">
-    <a href=@($"Document/{Result.BaseName}") target="_blank">
-        <h5 class="card-header">@Result.BaseName</h5>
-    </a>
+    <div class="card-header  d-flex flex-row align-items-center">
+        <a class="flex-grow-1" href=@($"Document/{Result.BasePath}") target="_blank">
+            <h5>@Result.BaseName</h5>
+        </a>
+        @if (Result.OriginalURL is string url)
+        {
+            <a class="small" href=@Result.OriginalURL target="_blank">
+                Original
+                <span class="iconify" data-icon="bi:arrow-bar-right" data-inline="false"></span>
+            </a>
+        }
+    </div>
     <div class="card-body">
         <ul>
             @foreach (var token in Result.HighlightedSnippets)
@@ -9,6 +18,7 @@
                 <li>@((MarkupString)token)</li>
             }
         </ul>
+        <footer class="blockquote-footer">@Result.LastWrite.ToShortDateString()</footer>
     </div>
 </div>
 @code {

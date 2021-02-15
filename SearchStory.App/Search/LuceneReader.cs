@@ -13,6 +13,8 @@ using Lucene.Net.Analysis;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Collections.Generic;
+using System.Text.Json;
+using System;
 
 namespace SearchStory.App.Search
 {
@@ -32,13 +34,13 @@ namespace SearchStory.App.Search
             Logger = logger;
         }
 
-        public record SearchResult(string Filename, IEnumerable<string> HighlightedSnippets)
+        public record SearchResult(string Filename, IEnumerable<string> HighlightedSnippets, string? OriginalURL, DateTime LastWrite)
         {
-            /// <summary>
-            ///  TODO: make this work with web pages
-            /// </summary>
-            /// <returns></returns>
-            public string BaseName => Path.GetFileName(Filename);
+            public string BaseName =>
+                Path.GetFileNameWithoutExtension(Filename)
+                    .Replace("_", " ");
+            public string BasePath => Path.GetFileName(Filename);
+            public bool HasOriginal => OriginalURL is not null;
         };
 
         /// <summary>
@@ -72,18 +74,22 @@ namespace SearchStory.App.Search
 
             // todo make search after for proper paging
             var hits = searcher.Search(query, PAGE_SIZE);
-            // Highlighter highlighter = new(new QueryScorer(query));
             Highlighter highlighter = new(new SimpleHTMLFormatter("<B class='highlight'>", "</B>"), new QueryScorer(query));
             highlighter.TextFragmenter = new SimpleFragmenter(FragmentSize);
             for (int i = 0; i < hits.ScoreDocs.Length; i++)
             {
                 var doc = reader.Document(hits.ScoreDocs[i].Doc);
-                int maxNumFragmentsRequired = 10;
-                // TokenStream tokenStream = analyzer.TokenStream(FIELD_NAME, new System.IO.StringReader(text));
-                TokenStream tokenStream = analyzer.GetTokenStream(LuceneDocument.CONTENTS, doc.Get(LuceneDocument.CONTENTS));
-                var fragmentSeparator = "...";
-                var result = highlighter.GetBestFragments(tokenStream, doc.Get(LuceneDocument.CONTENTS), maxNumFragmentsRequired, fragmentSeparator);
-                yield return new(doc.Get(LuceneDocument.PATH), result.Split(fragmentSeparator));
+                int maxFragments = 10;
+                var fragments = highlighter.GetBestFragments(
+                        analyzer,
+                        LuceneDocument.CONTENTS,
+                        doc.Get(LuceneDocument.CONTENTS),
+                        maxFragments
+                    );
+                var url = doc.Get(LuceneDocument.URL);
+                var path = doc.Get(LuceneDocument.PATH);
+                var modified = doc.Get(LuceneDocument.MODIFIED);
+                yield return new(path, fragments, url, new DateTime(long.Parse(modified)));
             }
 
         }

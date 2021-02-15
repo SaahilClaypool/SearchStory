@@ -21,7 +21,7 @@ namespace SearchStory.App.UseCases
             SearchIndex = searchIndex;
         }
 
-        public async Task<Response> Exectute(Command input)
+        public async Task<Response> Execute(Command input)
         {
             await SearchIndex.AddWebpage(input.NewFileName, input.Url, input.RawContent);
             return new();

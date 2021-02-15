@@ -28,7 +28,7 @@ namespace SearchStory.App.UseCases
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<Response> Exectute(Command input)
+        public async Task<Response> Execute(Command input)
         {
             Logger.LogWarning("Clearing all!");
             var dir = DirService.DocumentDir;

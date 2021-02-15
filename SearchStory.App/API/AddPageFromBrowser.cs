@@ -19,7 +19,7 @@ namespace SearchStory.App.API
     [EnableCors("LocalBrowser")]
     public class AddPageFromBrowser : BaseAsyncEndpoint<AddPageFromBrowser.TRequest, AddPageFromBrowser.TResponse>
     {
-        public record TRequest(string Url, string Content);
+        public record TRequest(string Url, string Content, string Title);
         public record TResponse();
         public LuceneWriter Writer { get; set; }
         public AddWebpage WebPageAdder { get; }
@@ -40,15 +40,15 @@ namespace SearchStory.App.API
             CancellationToken cancellationToken = default
         )
         {
-            Logger.LogInformation("Hit browser endpoint");
-            var newFileName = PathifyUrl(request.Url);
+            Logger.LogInformation($"Browser has {request.Title}");
+            var newFileName = PathifyUrl(request.Title);
+            Logger.LogInformation($"turned {request.Title} into {newFileName}");
             Logger.LogInformation($"new file name {newFileName}");
             var localFilePath = Dirs.DocumentDir.FullName + newFileName + ".html";
             Logger.LogInformation($"local file {localFilePath}");
             await System.IO.File.WriteAllTextAsync(localFilePath, request.Content, cancellationToken);
             var rawText = TextifyHtml(request.Content);
-            Logger.LogInformation($"Raw text: {rawText}");
-            await WebPageAdder.Exectute(new(localFilePath, request.Url, rawText));
+            await WebPageAdder.Execute(new(localFilePath, request.Url, rawText));
             return Ok(new());
         }
 
@@ -70,12 +70,12 @@ namespace SearchStory.App.API
         private static string PathifyUrl(string url) =>
             new(url
                 .Replace("/", "_")
+                .Replace(" ", "_")
                 .Where(character =>
+                    character == '_' ||
                     character == '.' ||
-                    character >= 'a' &&
-                    character <= 'z' ||
-                    character >= 'A' &&
-                    character > 'Z'
+                    (character >= 'a' && character <= 'z') ||
+                    (character >= 'A' && character <= 'Z')
                 ).ToArray());
     }
 }

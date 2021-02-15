@@ -7,6 +7,7 @@ if (typeof Readability !== 'undefined') {
     var payload = JSON.stringify(
         {
             'url': document.URL,
+            'title': document.title,
             'content': parsedDocument.content
         }
     );

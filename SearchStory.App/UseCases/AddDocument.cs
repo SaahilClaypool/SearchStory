@@ -21,7 +21,7 @@ namespace SearchStory.App.UseCases
             SearchIndex = searchIndex;
         }
 
-        public async Task<Response> Exectute(Command input)
+        public async Task<Response> Execute(Command input)
         {
             var file = new FileInfo(DirService.DocumentDir.FullName + Path.GetFileName(input.NewFileName));
             Logger.LogInformation($"Moving {input.NewFileName} to {file}");

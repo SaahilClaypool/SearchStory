@@ -25,7 +25,7 @@ namespace SearchStory.App.UseCases
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<Response> Exectute(Command input)
+        public async Task<Response> Execute(Command input)
         {
             var dir = DirService.DocumentDir;
             return new(dir.GetFiles()

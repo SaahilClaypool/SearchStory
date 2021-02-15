@@ -17,7 +17,7 @@ namespace SearchStory.App.Search
             {
                 new StringField(PATH, path, Field.Store.YES),
                 new TextField(CONTENTS, contents, Field.Store.YES),
-                new Int64Field(MODIFIED, DateTime.UtcNow.Ticks, Field.Store.NO)
+                new Int64Field(MODIFIED, DateTime.UtcNow.Ticks, Field.Store.YES)
             };
 
         public static Document Web(
@@ -29,7 +29,7 @@ namespace SearchStory.App.Search
             {
                 new StringField(PATH, path, Field.Store.YES),
                 new TextField(CONTENTS, contents, Field.Store.YES),
-                new Int64Field(MODIFIED, DateTime.UtcNow.Ticks, Field.Store.NO),
+                new Int64Field(MODIFIED, DateTime.UtcNow.Ticks, Field.Store.YES),
                 new StringField(URL, url, Field.Store.YES),
             };
     }

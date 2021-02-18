@@ -11,8 +11,18 @@
     <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-    <PublishTrimmed>true</PublishTrimmed>
+    <PublishTrimmed>false</PublishTrimmed>
+    <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+    <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Added to fix issue:
+          https://github.com/dotnet/aspnetcore/issues/26862 
+          https://github.com/dotnet/aspnetcore/issues/26884
+    -->
+    <EmbeddedResource Include="wwwroot/**" Watch="false"/>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.30" />
@@ -20,7 +30,13 @@
     <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta00013" />
     <PackageReference Include="Lucene.Net.Highlighter" Version="4.8.0-beta00013" />
     <PackageReference Include="Lucene.Net.QueryParser" Version="4.8.0-beta00013" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.0.3" />
     <PackageReference Include="PdfPig" Version="0.1.4" />
   </ItemGroup>
+
+  <Target Name="ParcelBeforePublish" 
+        BeforeTargets="BeforeBuild">
+    <Exec Command="npm run build --prefix StaticWeb" />
+  </Target>
 
 </Project>

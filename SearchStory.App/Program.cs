@@ -20,7 +20,7 @@ namespace SearchStory.App
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>();
+                    webBuilder.UseStaticWebAssets().UseStartup<Startup>();
                 });
     }
 }

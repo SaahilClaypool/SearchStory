@@ -66,7 +66,31 @@ namespace SearchStory.App
             }
 
             // app.UseHttpsRedirection();
+            System.Console.WriteLine(string.Join("\n\t", typeof(Program).Assembly.GetManifestResourceNames()));
             app.UseStaticFiles();
+            try
+            {
+                app.UseStaticFiles(options: new()
+                {
+                    FileProvider = new ManifestEmbeddedFileProvider(
+                        typeof(Program).Assembly,
+                        "wwwroot"
+                        ),
+                });
+
+                app.UseStaticFiles(options: new()
+                {
+                    FileProvider = new ManifestEmbeddedFileProvider(
+                        typeof(Program).Assembly
+                    ),
+                });
+            }
+            catch
+            {
+
+            }
+
+
             app.UseStaticFiles(options: new()
             {
                 FileProvider = new PhysicalFileProvider(

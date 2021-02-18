@@ -3,20 +3,33 @@
 <div>
     <InputFile multiple OnChange="@OnFileChange" />
     <button class="btn btn-primary" @onclick="AddDocument">Index</button>
+    @if (NewFiles is not null)
+    {
+        <h3 style="color: white">@NewFiles.Count()</h3>
+        <div class="progress m-2" style="height: 20px;">
+            <div class="progress-bar" role="progressbar" style="@($"width: {Progress()}%")">
+                @indexed / @NewFiles.Count()
+            </div>
+        </div>
+    }
 </div>
 
 
 @code {
     [Inject]
-    AddDocument DocumentAdder { get; set; }
+    AddDocument DocumentAdder { get; set; } = null!;
 
     [Inject]
-    ILogger<Add> Logger { get; set; }
+    ILogger<Add> Logger { get; set; } = null!;
 
     [Inject]
     DirectoryService Dirs { get; set; }
 
     IEnumerable<IBrowserFile>? NewFiles = null;
+
+    int indexed = 0;
+
+    public int Progress() => (int)(indexed * 100.0 / NewFiles.Count());
 
     public async Task AddDocument()
     {
@@ -37,8 +50,10 @@
                 // TODO: move into add many files use case
                 var shouldFlush = index == count - 1 || index % 20 == 0;
                 await DocumentAdder.Execute(new(localFilePath, shouldFlush));
+                indexed = index + 1;
+                StateHasChanged();
             }
-            NewFiles = null;
+            // NewFiles = null;
         }
     }
 

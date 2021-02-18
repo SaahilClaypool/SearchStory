@@ -33,6 +33,7 @@ namespace SearchStory.App.UseCases
                 file.Delete();
             }
             await Writer.RemoveAll();
+            Writer.Flush();
 
             return new();
         }

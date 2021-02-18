@@ -2,7 +2,7 @@
 
 <div>
     <InputFile multiple OnChange="@OnFileChange" />
-    <button class="btn btn-primary" @onclick="AddDocument">Index</button>
+    <button class="btn btn-primary" @onclick="Execute">Index</button>
     @if (NewFiles is not null)
     {
         <h3 style="color: white">@NewFiles.Count()</h3>
@@ -17,7 +17,7 @@
 
 @code {
     [Inject]
-    AddDocument DocumentAdder { get; set; } = null!;
+    AddDocuments DocumentAdder { get; set; } = null!;
 
     [Inject]
     ILogger<Add> Logger { get; set; } = null!;
@@ -31,12 +31,14 @@
 
     public int Progress() => (int)(indexed * 100.0 / NewFiles.Count());
 
-    public async Task AddDocument()
+    public async Task Execute()
     {
         if (NewFiles is not null)
         {
             var count = NewFiles.Count();
-            foreach (var (newFile, index) in NewFiles.WithIndex())
+            var files = new List<string>();
+            var index = 0;
+            foreach (var newFile in NewFiles)
             {
                 var localFilePath = Dirs.TempDir.FullName + newFile.Name;
                 Console.WriteLine($"Writing {localFilePath}\n");
@@ -46,14 +48,18 @@
                         .OpenReadStream(maxAllowedSize: 1_000_000_000)
                         .CopyToAsync(localFile);
                 }
-                Console.WriteLine($"Adding to index {localFilePath}\n");
-                // TODO: move into add many files use case
-                var shouldFlush = index == count - 1 || index % 20 == 0;
-                await DocumentAdder.Execute(new(localFilePath, shouldFlush));
-                indexed = index + 1;
+                files.Add(localFilePath);
+                indexed = index++ + 1;
                 StateHasChanged();
             }
-            // NewFiles = null;
+
+            index = 0;
+            await foreach (var result in DocumentAdder.Execute(new(files)))
+            {
+                indexed = index++ + 1;
+                StateHasChanged();
+            }
+            NewFiles = null;
         }
     }
 

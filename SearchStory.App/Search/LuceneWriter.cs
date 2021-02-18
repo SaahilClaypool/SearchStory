@@ -12,7 +12,7 @@ using Lucene.Net.Analysis.En;
 
 namespace SearchStory.App.Search
 {
-    public class LuceneWriter
+    public class LuceneWriter : IDisposable
     {
         public DirectoryService DirectoryService { get; }
         public ILogger<LuceneWriter> Logger { get; }
@@ -42,6 +42,11 @@ namespace SearchStory.App.Search
             });
         }
 
+        public void Flush()
+        {
+            Writer.Flush(true, true);
+        }
+
         public Task AddWebpage(string localFilename, string url, string textContent)
         {
             return Task.Run(() =>
@@ -54,18 +59,28 @@ namespace SearchStory.App.Search
 
         public Task RemoveFile(FileInfo file)
         {
-            using var writer = GetIndexWriter();
-            writer.DeleteDocuments(new Term(LuceneDocument.PATH, file.FullName));
+            Writer.DeleteDocuments(new Term(LuceneDocument.PATH, file.FullName));
             return Task.CompletedTask;
         }
 
         public Task RemoveAll()
         {
-            using var writer = GetIndexWriter();
-            writer.DeleteAll();
+            Writer.DeleteAll();
             return Task.CompletedTask;
         }
 
+        IndexWriter? _writer = null;
+        IndexWriter Writer
+        {
+            get
+            {
+                if (_writer is null)
+                {
+                    _writer = GetIndexWriter();
+                }
+                return _writer;
+            }
+        }
         public IndexWriter GetIndexWriter()
         {
             var dir = FSDirectory.Open(DirectoryService.IndexDir);
@@ -79,15 +94,24 @@ namespace SearchStory.App.Search
 
         private void Write(Lucene.Net.Documents.Document doc, bool flush)
         {
-            using var writer = GetIndexWriter();
-            writer.UpdateDocument(new Term(LuceneDocument.PATH, doc.Get(LuceneDocument.PATH)), doc);
-            if(flush) {
-                Logger.LogInformation($"Flushed index to {writer.Directory}");
-                writer.Flush(true, true);
-            } else {
+            Writer.UpdateDocument(new Term(LuceneDocument.PATH, doc.Get(LuceneDocument.PATH)), doc);
+            if (flush)
+            {
+                Logger.LogInformation($"Flushed index to {Writer.Directory}");
+                Writer.Flush(true, true);
+            }
+            else
+            {
                 Logger.LogInformation($"Added document without flushing");
             }
         }
 
+        public void Dispose()
+        {
+            Logger.LogInformation("Disposing lucene writer");
+            GC.SuppressFinalize(this);
+            Flush();
+            Writer.Dispose();
+        }
     }
 }

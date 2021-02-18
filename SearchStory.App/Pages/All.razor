@@ -3,11 +3,11 @@
 
 @if(Data is not null)
 {
-    @foreach (var fileInfo in Data)
+    @foreach (var (fileInfo, index) in Data.WithIndex())
     {
-        <div>
+        <div class="pt-4">
             <a href=@($"Document/{fileInfo.Name}") target="_blank">
-                <h5 class="card-header">@fileInfo.Name</h5>
+                <h5 class="card-header">@($"{index + 1}. {fileInfo.Name}")</h5>
             </a>
         </div>
     }

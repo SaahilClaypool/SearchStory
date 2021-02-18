@@ -22,7 +22,8 @@
     {
         if (NewFiles is not null)
         {
-            foreach (var newFile in NewFiles)
+            var count = NewFiles.Count();
+            foreach (var (newFile, index) in NewFiles.WithIndex())
             {
                 var localFilePath = Dirs.TempDir.FullName + newFile.Name;
                 Console.WriteLine($"Writing {localFilePath}\n");
@@ -33,7 +34,9 @@
                         .CopyToAsync(localFile);
                 }
                 Console.WriteLine($"Adding to index {localFilePath}\n");
-                await DocumentAdder.Execute(new(localFilePath));
+                // TODO: move into add many files use case
+                var shouldFlush = index == count - 1 || index % 20 == 0;
+                await DocumentAdder.Execute(new(localFilePath, shouldFlush));
             }
             NewFiles = null;
         }
@@ -41,12 +44,12 @@
 
     public void OnFileChange(InputFileChangeEventArgs args)
     {
-        const int MAX_COUNT = 15;
+        const int MAX_COUNT = 10000;
         if (args.FileCount > MAX_COUNT)
         {
-            Console.WriteLine($"Error: too many files entered - max is {15}");
+            Console.WriteLine($"Error: too many files entered - max is {MAX_COUNT}");
             return;
         }
-        NewFiles = args.GetMultipleFiles(15);
+        NewFiles = args.GetMultipleFiles(MAX_COUNT);
     }
 }

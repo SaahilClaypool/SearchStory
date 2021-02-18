@@ -9,7 +9,7 @@ namespace SearchStory.App.UseCases
 {
     public class ListDocuments : IUseCase<ListDocuments.Command, ListDocuments.Response>
     {
-        public record Command(int Page = 0, int PageSize = 15);
+        public record Command(int Page = 0, int PageSize = 100);
         public record Response(IEnumerable<FileInfo> Files);
         public ILogger<ListDocuments> Logger { get; }
         public DirectoryService DirService { get; }

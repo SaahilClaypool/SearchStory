@@ -29,12 +29,12 @@ namespace SearchStory.App.Search
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public Task AddFile(FileInfo file)
+        public Task AddFile(FileInfo file, bool index = true)
         {
             return Task.Run(() =>
             {
                 var (key, doc, disposables) = new Transformer().Transform(file);
-                Write(doc);
+                Write(doc, index);
                 foreach (var d in disposables)
                 {
                     d.Dispose();
@@ -48,7 +48,7 @@ namespace SearchStory.App.Search
             {
                 var localFile = new FileInfo(localFilename);
                 var doc = LuceneDocument.Web(localFilename, textContent, url);
-                Write(doc);
+                Write(doc, true);
             });
         }
 
@@ -77,12 +77,16 @@ namespace SearchStory.App.Search
             return new(dir, iwc);
         }
 
-        private void Write(Lucene.Net.Documents.Document doc)
+        private void Write(Lucene.Net.Documents.Document doc, bool flush)
         {
             using var writer = GetIndexWriter();
             writer.UpdateDocument(new Term(LuceneDocument.PATH, doc.Get(LuceneDocument.PATH)), doc);
-            writer.Flush(true, true);
-            Logger.LogInformation($"Flushed index to {writer.Directory}");
+            if(flush) {
+                Logger.LogInformation($"Flushed index to {writer.Directory}");
+                writer.Flush(true, true);
+            } else {
+                Logger.LogInformation($"Added document without flushing");
+            }
         }
 
     }

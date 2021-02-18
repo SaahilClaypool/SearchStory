@@ -8,7 +8,7 @@ namespace SearchStory.App.UseCases
 {
     public class AddDocument : IUseCase<AddDocument.Command, AddDocument.Response>
     {
-        public record Command(string NewFileName);
+        public record Command(string NewFileName, bool Flush = true);
         public record Response();
         public ILogger<AddDocument> Logger { get; }
         public DirectoryService DirService { get; }
@@ -26,7 +26,7 @@ namespace SearchStory.App.UseCases
             var file = new FileInfo(DirService.DocumentDir.FullName + Path.GetFileName(input.NewFileName));
             Logger.LogInformation($"Moving {input.NewFileName} to {file}");
             File.Move(input.NewFileName, file.ToString(), overwrite: true);
-            await SearchIndex.AddFile(file);
+            await SearchIndex.AddFile(file, input.Flush);
             return new();
         }
     }

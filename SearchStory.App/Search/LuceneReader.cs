@@ -52,7 +52,6 @@ namespace SearchStory.App.Search
         public IEnumerable<SearchResult> Search(string term)
         {
             if (term == "") return new List<SearchResult>();
-            // using var reader = Writer.IndexWriter.GetReader(applyAllDeletes: false);
             using var reader = DirectoryReader.Open(FSDirectory.Open(DirectoryService.IndexDir));
             var searcher = new IndexSearcher(reader);
 
@@ -60,9 +59,10 @@ namespace SearchStory.App.Search
             {
                 return DoQuery(reader, searcher, term).ToList();
             }
-            catch
+            catch(Exception e)
             {
-                return new List<SearchResult>();
+                Logger.LogError($"Error: {e.Message}");
+                return new List<SearchResult>(); 
             }
         }
 

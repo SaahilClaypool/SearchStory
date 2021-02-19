@@ -4,24 +4,18 @@
 {
     <div role="alert" aria-live="assertive" aria-atomic="true" class="toast" style="opacity: unset;">
     <div class="toast-header">
-        <strong class="mr-auto">Bootstrap</strong>
+        <strong class="mr-auto">Notice</strong>
         <button @onclick="Clear" type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
     <div class="toast-body">
-        Hello, world! This is a toast message.
+        @State.Value.ErrorMessage
     </div>
 </div>
 }
 
-<button @onclick="MakeToast">Make Toast</button>
-
 @code {
-    public void MakeToast()
-    {
-        State.Update(() => State.Value.ErrorMessage = "Testing");
-    }
     public void Clear()
     {
         State.Update(() => State.Value.ErrorMessage = null);

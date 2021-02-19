@@ -44,7 +44,10 @@ namespace SearchStory.App.Search
 
         public void Flush()
         {
+            Logger.LogInformation("flushing\n");
             Writer.Flush(true, true);
+            Writer.Dispose();
+            Writer = null!; // it'll regenerate as needed
         }
 
         public Task AddWebpage(string localFilename, string url, string textContent)
@@ -80,6 +83,10 @@ namespace SearchStory.App.Search
                 }
                 return _writer;
             }
+            set
+            {
+                _writer = value;
+            }
         }
         public IndexWriter GetIndexWriter()
         {
@@ -111,7 +118,6 @@ namespace SearchStory.App.Search
             Logger.LogInformation("Disposing lucene writer");
             GC.SuppressFinalize(this);
             Flush();
-            Writer.Dispose();
         }
     }
 }

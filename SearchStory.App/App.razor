@@ -1,4 +1,4 @@
-﻿<CascadingValue Value=@(new StateContainer(new AppState() { Test = "test" }))>
+﻿<CascadingValue Value=@(State)>
     <Router AppAssembly="@typeof(Program).Assembly">
         <Found Context="routeData">
             <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
@@ -12,5 +12,5 @@
 </CascadingValue>
 
 @code {
-    StateContainer State { get; } = new(new() { Test = "test" });
+    [Inject] public StateContainer State { get; set; }
 }

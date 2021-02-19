@@ -8,7 +8,7 @@ namespace SearchStory.App.Services
     public class StateContainer
     {
         public AppState Value { get; set; }
-        public event Action OnChange;
+        public event Action? OnChange;
 
         public StateContainer() : this(new()) { }
         public StateContainer(AppState initialState)
@@ -25,6 +25,6 @@ namespace SearchStory.App.Services
 
     public class AppState
     {
-        public string Test { get; set; }
+        public string? ErrorMessage { get; set; }
     }
 }

@@ -1,12 +1,12 @@
 @implements IDisposable
 @code {
     [CascadingParameter]
-    public virtual StateContainer State { get; set; }
+    public virtual StateContainer State { get; set; } = null!;
     protected override Task OnInitializedAsync()
     {
         if (State != null)
         {
-            State.OnChange += StateHasChanged;
+            State.OnChange += OnChange;
         }
         return Task.CompletedTask;
     }
@@ -15,7 +15,13 @@
     {
         if (State != null)
         {
-            State.OnChange -= StateHasChanged;
+            State.OnChange -= OnChange;
         }
+    }
+    
+    public void OnChange()
+    {
+        Console.WriteLine("State has changed!");
+        StateHasChanged();
     }
 }

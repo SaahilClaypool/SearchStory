@@ -40,6 +40,7 @@ namespace SearchStory.App
             services.AddScoped<LuceneReader>();
             services.AddControllers();
             services.AddUseCases();
+            services.AddScoped<StateContainer>();
             services.AddCors(o => o.AddPolicy("LocalBrowser", builder =>
             {
                 builder

@@ -1,5 +1,50 @@
 <div>
     Type in the path to, hit submit, see all files (or count of files), index them all in the background
     Singleton index runner
-    <input type="text" placeholder="placeholder"/>
+    <input class="form-control form-control-sm" type="text" @bind="Folder" placeholder="Folder to add" />
+    <button @onclick="Execute" class="btn btn-primary">Submit Folder</button>
+    @if (ShowProgress)
+    {
+        <div class="progress m-2" style="height: 20px;">
+            <div class="progress-bar" role="progressbar" style="@($"width: {(int)(Progress * 100)}%")">
+                @((int)(Progress * 100)) %
+            </div>
+        </div>
+    }
 </div>
+
+@code {
+    [Inject] IndexDirectoryUseCase IndexDirectory { get; set; }
+    [Inject] StateContainer State { get; set; }
+
+    string Folder { get; set; } = "";
+
+    float Progress { get; set; }
+    bool ShowProgress { get; set; } = false;
+
+
+    async Task Execute(EventArgs __ev)
+    {
+        ShowProgress = true;
+        try
+        {
+            await foreach (var progress in IndexDirectory.Execute(new(Folder)))
+            {
+                Progress = progress;
+                StateHasChanged();
+            }
+        }
+        catch (Exception e)
+        {
+            State.Update(() => State.Value.ErrorMessage = e.Message);
+        }
+        finally
+        {
+            ShowProgress = false;
+        }
+    }
+}
+
+
+
+

@@ -29,12 +29,12 @@ namespace SearchStory.App.Search
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public Task AddFile(FileInfo file, bool index = true)
+        public Task AddFile(FileInfo file, bool flush = true)
         {
             return Task.Run(() =>
             {
                 var (key, doc, disposables) = new Transformer().Transform(file);
-                Write(doc, index);
+                Write(doc, flush);
                 foreach (var d in disposables)
                 {
                     d.Dispose();

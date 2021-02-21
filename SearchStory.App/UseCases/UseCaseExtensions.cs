@@ -13,6 +13,7 @@ namespace SearchStory.App.UseCases
             collection.AddScoped<ListDocuments>();
             collection.AddScoped<ClearAll>();
             collection.AddScoped<AddWebpage>();
+            collection.AddScoped<IndexDirectoryUseCase>();
             return collection;
         }
     }

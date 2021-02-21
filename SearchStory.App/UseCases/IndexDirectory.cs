@@ -38,25 +38,29 @@ namespace SearchStory.App.UseCases
             var count = validFiles.Count();
             foreach (var (newFile, index) in validFiles.WithIndex())
             {
-                var localFilePath = Dirs.TempDir.FullName + newFile.Name;
+                var localFilePath = Dirs.DocumentDir.FullName + newFile.Name;
                 Console.WriteLine($"Writing {localFilePath}\n");
-                using var localFile = File.OpenWrite(localFilePath);
-                using var remoteFile = File.OpenRead(newFile.FullName);
-                await remoteFile.CopyToAsync(localFile);
+                using (var localFile = File.OpenWrite(localFilePath))
+                using (var remoteFile = File.OpenRead(newFile.FullName))
+                {
+                    await remoteFile.CopyToAsync(localFile);
+                }
+                await SearchIndex.AddFile(new FileInfo(localFilePath), flush: false);
                 yield return ((float)(index + 1)) / count;
             }
+            SearchIndex.Flush();
         }
 
 
         private static IEnumerable<FileInfo> EnumerateFilesRecursive(DirectoryInfo directory)
         {
-            foreach(var file in directory.EnumerateFiles())
+            foreach (var file in directory.EnumerateFiles())
             {
                 yield return file;
             }
-            foreach(var subDir in directory.EnumerateDirectories())
+            foreach (var subDir in directory.EnumerateDirectories())
             {
-                foreach(var subFile in EnumerateFilesRecursive(subDir))
+                foreach (var subFile in EnumerateFilesRecursive(subDir))
                 {
                     yield return subFile;
                 }

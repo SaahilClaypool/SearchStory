@@ -1,20 +1,15 @@
 {
-  "name": "StaticWeb",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "build": "parcel build ./main.js --out-dir ../wwwroot/dist/",
-    "watch": "parcel watch ./main.js --out-dir ../wwwroot/dist/"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "node-sass": "^5.0.0",
-    "parcel-bundler": "^1.12.4"
+    "cssnano": "^4.1.10",
+    "parcel": "^1.12.4"
+  },
+  "scripts": {
+    "build": "npx parcel build ./styles.pcss --out-dir ../wwwroot/dist/",
+    "watch": "npx parcel watch ./main.js --out-dir ../wwwroot/dist/"
   },
   "dependencies": {
-    "bootstrap": "^4.6.0"
+    "autoprefixer": "^9.8.6",
+    "postcss": "^7.0.35",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.3"
   }
 }

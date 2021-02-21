@@ -1,32 +1,21 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="">SearchStory</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+﻿<div class="flex flex-col space-y-4 w-full items-center pt-5">
+    <div>
+        @CustomNavLink("Home", "")
+    </div>
+    <div>
+        @CustomNavLink("All", "All")
+    </div>
 </div>
 
-<div class="@NavMenuCssClass flex-column" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column flex-fill">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="All">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> All
-            </NavLink>
-        </li>
-    </ul>
-</div>
 
 @code {
-    private bool collapseNavMenu = true;
-
-    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
+    private RenderFragment CustomNavLink(string text, string href)
     {
-        collapseNavMenu = !collapseNavMenu;
+        return __builder =>
+        {
+            <NavLink href=@href class="bg-gray-400 rounded shadow border p1">
+                @text
+            </NavLink>
+        };
     }
 }

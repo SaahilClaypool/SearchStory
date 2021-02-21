@@ -35,7 +35,6 @@ namespace SearchStory.App
             services.AddServerSideBlazor();
             services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<DirectoryService>();
-            // singleton to re-use between searches
             services.AddScoped<LuceneWriter>();
             services.AddScoped<LuceneReader>();
             services.AddControllers();

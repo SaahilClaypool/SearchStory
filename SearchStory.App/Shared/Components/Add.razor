@@ -1,14 +1,14 @@
-@using System.IO;
-
-<div>
+<div class="flex flex-col">
     <InputFile multiple OnChange="@OnFileChange" />
-    <button class="btn btn-primary" @onclick="Execute">Index</button>
+    <button class="bg-blue-200 rounded border p-2 text-l bold" @onclick="Execute">Index</button>
     @if (NewFiles is not null)
     {
-        <h3 style="color: white">@NewFiles.Count()</h3>
-        <div class="progress m-2" style="height: 20px;">
-            <div class="progress-bar" role="progressbar" style="@($"width: {Progress()}%")">
-                @indexed / @NewFiles.Count()
+          <div class="relative pt-1 w-full">
+            <div class="overflow-hidden h-5 mb-4 flex rounded bg-blue-200">
+                <div style=@($"width:{(int)(Progress())}%")
+                    class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-pink-500">
+                    @indexed / @NewFiles.Count()
+                </div>
             </div>
         </div>
     }

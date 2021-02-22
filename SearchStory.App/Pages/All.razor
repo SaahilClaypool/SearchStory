@@ -7,11 +7,7 @@
 
     @foreach (var (fileInfo, index) in Data.WithIndex())
         {
-            <div class="pt-4">
-                <a class="underline" href=@($"Document/{fileInfo.Name}") target="_blank">
-                    <h5 class="card-header">@($"{index + 1}. {fileInfo.Name}")</h5>
-                </a>
-            </div>
+            <FileLink Href=@Href(fileInfo) Link=@($"{index + 1}. {Href(fileInfo)}") OriginalURL=@Href(fileInfo) />
         }
     </div>
 }
@@ -23,6 +19,8 @@
     [Inject] ILogger<Add> Logger { get; set; }
 
     IEnumerable<FileInfo>? Data = null;
+
+    string Href(FileInfo fileInfo) => $"Document/{fileInfo.Name}";
 
     protected override async Task OnInitializedAsync()
     {

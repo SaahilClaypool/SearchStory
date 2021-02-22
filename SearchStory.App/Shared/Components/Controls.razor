@@ -2,7 +2,7 @@
 
 @if (State.Value.VisibleControl != AppState.VisibleControlType.None)
 {
-    <div class="flex-none flex flex-col bg-gray-100 items-center rounded-tl-xl border-l shadow-2xl p-3">
+    <div class="flex-none flex flex-col bg-gray-100 items-center rounded-tl-xl border-l shadow-2xl p-3 w-80">
         <button class="text-lg bg-red-300 px-2 py-1 boder rounded" @onclick="Close">Close</button>
         @if (State.Value.VisibleControl == AppState.VisibleControlType.AddFile)
         {

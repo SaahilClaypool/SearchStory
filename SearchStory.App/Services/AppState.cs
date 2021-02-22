@@ -32,5 +32,7 @@ namespace SearchStory.App.Services
             AddDirectory
         }
         public VisibleControlType VisibleControl = VisibleControlType.None;
+        public string? PreviewHref { get; set; } = null;
+        public string? OriginalHref { get; set; } = null;
     }
 }

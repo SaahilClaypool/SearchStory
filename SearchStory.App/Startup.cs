@@ -96,7 +96,8 @@ namespace SearchStory.App
                 FileProvider = new PhysicalFileProvider(
                     new DirectoryService().DocumentDir.FullName
                 ),
-                RequestPath = "/Document"
+                RequestPath = "/Document",
+                ServeUnknownFileTypes = true
             });
 
             app.UseRouting();

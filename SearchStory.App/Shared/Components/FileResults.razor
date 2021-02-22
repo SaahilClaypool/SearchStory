@@ -1,6 +1,6 @@
 <div class="border rounded-xl w-full shadow">
     <div class="card-header bg-gray-100 p-3 mb-2 flex rounded-t-xl">
-        <a class="flex-auto underline text-black text-lg" href=@($"Document/{Result.BasePath}") target="_blank">
+        @* <a class="flex-auto underline text-black text-lg" href=@($"Document/{Result.BasePath}") target="_blank">
             @Result.BaseName
         </a>
         @if (Result.OriginalURL is string url)
@@ -9,7 +9,8 @@
                 Original
                 <span class="inline iconify" data-icon="bi:arrow-bar-right" data-inline="false"></span>
             </a>
-        }
+        } *@
+        <FileLink Href=@($"Document/{Result.BasePath}") Link=@Result.BaseName OriginalURL=@Result.OriginalURL />
     </div>
     <div class="card-body flex flex-col justify-between">
         <ul class="flex flex-col space-y-3 p-4">

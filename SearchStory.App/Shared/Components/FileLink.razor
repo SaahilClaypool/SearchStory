@@ -1,0 +1,24 @@
+<div class="flex-auto flex bg-gray-100 justify-between">
+    <button @onclick="OnClick" class="flex-auto underline text-black text-lg text-left">
+        @Link
+    </button>
+    <a class="text-lg flex-none" href=@(OriginalURL ?? Href) target="_blank">
+        <span class="inline iconify" data-icon="bi:arrow-bar-right" data-inline="false"></span>
+    </a>
+</div>
+@code {
+    [Inject] StateContainer State { get; set; } = null!;
+
+    [Parameter] public string Href { get; set; } = "";
+    [Parameter] public string Link { get; set; } = null!;
+    [Parameter] public string? OriginalURL { get; set; } = null;
+
+    void OnClick()
+    {
+        State.Update(() => 
+        {
+            State.Value.PreviewHref = Href;
+            State.Value.OriginalHref = OriginalURL ?? Href;
+        });
+    }
+}

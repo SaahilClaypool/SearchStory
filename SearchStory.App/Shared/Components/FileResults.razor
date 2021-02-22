@@ -1,5 +1,5 @@
-<div class="border-2 rounded-xl w-full">
-    <div class="card-header bg-gray-100 p-3 mb-2 flex">
+<div class="border rounded-xl w-full shadow">
+    <div class="card-header bg-gray-100 p-3 mb-2 flex rounded-t-xl">
         <a class="flex-auto underline text-black text-lg" href=@($"Document/{Result.BasePath}") target="_blank">
             @Result.BaseName
         </a>
@@ -11,14 +11,14 @@
             </a>
         }
     </div>
-    <div class="card-body">
-        <ul class="list group list-group-flush">
+    <div class="card-body flex flex-col justify-between">
+        <ul class="flex flex-col space-y-3 p-4">
             @foreach (var token in Result.HighlightedSnippets)
             {
-                <li class="list-group-item">@((MarkupString)token)</li>
+                <li class="border-b-2 pb-4">@((MarkupString)token)</li>
             }
         </ul>
-        <footer class="blockquote-footer">@Result.LastWrite.ToShortDateString()</footer>
+        <footer class="p-4 text-gray-500">@Result.LastWrite.ToShortDateString()</footer>
     </div>
 </div>
 @code {

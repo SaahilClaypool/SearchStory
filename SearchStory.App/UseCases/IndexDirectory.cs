@@ -38,14 +38,21 @@ namespace SearchStory.App.UseCases
             var count = validFiles.Count();
             foreach (var (newFile, index) in validFiles.WithIndex())
             {
-                var localFilePath = Dirs.DocumentDir.FullName + newFile.Name;
-                Console.WriteLine($"Writing {localFilePath}\n");
-                using (var localFile = File.OpenWrite(localFilePath))
-                using (var remoteFile = File.OpenRead(newFile.FullName))
+                try
                 {
-                    await remoteFile.CopyToAsync(localFile);
+                    var localFilePath = Dirs.DocumentDir.FullName + newFile.Name;
+                    Console.WriteLine($"Writing {localFilePath}\n");
+                    using (var localFile = File.OpenWrite(localFilePath))
+                    using (var remoteFile = File.OpenRead(newFile.FullName))
+                    {
+                        await remoteFile.CopyToAsync(localFile);
+                    }
+                    await SearchIndex.AddFile(new FileInfo(localFilePath), flush: false);
                 }
-                await SearchIndex.AddFile(new FileInfo(localFilePath), flush: false);
+                catch (Exception e)
+                {
+                    Logger.LogError(e.Message);
+                }
                 yield return ((float)(index + 1)) / count;
             }
             SearchIndex.Flush();

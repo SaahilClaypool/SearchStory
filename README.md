@@ -10,6 +10,8 @@ There are two use cases:
     In the future, using [pandoc] to convert everything to markdown (word etc.) may more sustainable.
     I see this being used to index something like a zotero folder to search research papers you have read.
 
+    I (and my one user...) provide the path to our [zotero] citation library to get full text search over all of the research articles we read.
+
 2. Using the inclulded browser extension, save a "text only" version of the page to the lucene index.
 
     I see this being the main use case - any time you read an interesting thing, hit a shortcut and index the entire text content.
@@ -36,3 +38,4 @@ There are two use cases:
 
 [pandoc]: https://pandoc.org/using-the-pandoc-api.html
 [readability]: https://github.com/mozilla/readability
+[zotero]: https://www.zotero.org/

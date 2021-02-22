@@ -1,8 +1,6 @@
-<div class="container">
-    <div>
-        <input class="form-control form-control-lg" type="text" @oninput="OnInput" placeholder="type to search" autofocus />
-    </div>
-    <div>
+<div class="flex flex-col items-center flex-auto flex-grow-0 flex-grow">
+    <input class="form-control form-control-lg" type="text" @oninput="OnInput" placeholder="type to search" autofocus />
+    <div class="results overflow-y-auto flex-grow-0">
         @if (Results is not null)
         {
             foreach (var result in Results)

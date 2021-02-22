@@ -26,5 +26,11 @@ namespace SearchStory.App.Services
     public class AppState
     {
         public string? ErrorMessage { get; set; }
+        public enum VisibleControlType {
+            None,
+            AddFile,
+            AddDirectory
+        }
+        public VisibleControlType VisibleControl = VisibleControlType.None;
     }
 }

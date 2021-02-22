@@ -1,0 +1,24 @@
+@inherits ReactiveComponent
+
+@if (State.Value.VisibleControl != AppState.VisibleControlType.None)
+{
+    <div class="flex-none flex flex-col bg-gray-200 items-center">
+        <button class="text-lg bg-red-300 px-2 py-1 boder rounded" @onclick="Close">Close</button>
+        @if (State.Value.VisibleControl == AppState.VisibleControlType.AddFile)
+        {
+            <Add />
+        }
+
+        @if (State.Value.VisibleControl == AppState.VisibleControlType.AddDirectory)
+        {
+            <AddDirectory />
+        }
+    </div>
+}
+
+@code {
+    public void Close()
+    {
+        State.Update(() => State.Value.VisibleControl = AppState.VisibleControlType.None);
+    }
+}

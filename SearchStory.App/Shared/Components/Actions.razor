@@ -1,11 +1,20 @@
 <div class="Actions">
-    <div>
-        <AddDirectory/>
-    </div>
-    <div>
-        <Add />
-    </div>
-    <div>
-        <ClearButton />
-    </div>
+    <button @onclick="ShowAddFile">Add File</button>
+    <button @onclick="ShowAddDirectory">Add Directory</button>
+    <ClearButton />
 </div>
+
+@code {
+
+    [Inject] StateContainer State { get; set; }
+
+    void ShowAddFile()
+    {
+        State.Update(() => State.Value.VisibleControl = AppState.VisibleControlType.AddFile);
+    }
+
+    void ShowAddDirectory()
+    {
+        State.Update(() => State.Value.VisibleControl = AppState.VisibleControlType.AddDirectory);
+    }
+}

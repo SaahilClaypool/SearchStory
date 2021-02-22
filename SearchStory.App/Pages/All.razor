@@ -1,16 +1,19 @@
 @page "/All"
 @using System.IO;
 
-@if(Data is not null)
+@if (Data is not null)
 {
+    <div class="flex flex-col space-y-4">
+
     @foreach (var (fileInfo, index) in Data.WithIndex())
-    {
-        <div class="pt-4">
-            <a href=@($"Document/{fileInfo.Name}") target="_blank">
-                <h5 class="card-header">@($"{index + 1}. {fileInfo.Name}")</h5>
-            </a>
-        </div>
-    }
+        {
+            <div class="pt-4">
+                <a class="underline" href=@($"Document/{fileInfo.Name}") target="_blank">
+                    <h5 class="card-header">@($"{index + 1}. {fileInfo.Name}")</h5>
+                </a>
+            </div>
+        }
+    </div>
 }
 @code {
     [Inject] ListDocuments ListDocuments { get; set; }

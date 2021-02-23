@@ -11,7 +11,9 @@
     <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <RuntimeIdentifier>linux-x64</RuntimeIdentifier>
-    <PublishTrimmed>false</PublishTrimmed>
+    <RuntimeIdentifier>osx-x64</RuntimeIdentifier>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <PublishTrimmed>true</PublishTrimmed>
     <IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
     <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
   </PropertyGroup>

@@ -5,5 +5,8 @@ services:
     command: "/bin/bash ./entrypoint.sh"
     ports:
       - "5000:5000"
+      - "5001:5001"
     volumes:
       - ./SearchStory.App/:/app
+    environment: 
+      - DOTNET_URLS="http://0.0.0.0:5000;https://0.0.0.0:5001"

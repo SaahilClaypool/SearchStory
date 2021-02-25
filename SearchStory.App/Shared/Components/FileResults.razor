@@ -1,6 +1,7 @@
+@inherits ReactiveComponent
 <div class="border rounded-xl w-full shadow">
-    <div class="card-header bg-gray-100 p-3 mb-2 flex rounded-t-xl">
-        <FileLink Href=@($"Document/{Result.BasePath}") Link=@Result.BaseName OriginalURL=@Result.OriginalURL />
+    <div class=@($"card-header p-3 mb-2 flex rounded-t-xl {HeaderBG}")>
+        <FileLink Href=@Href Link=@Result.BaseName OriginalURL=@Result.OriginalURL />
     </div>
     <div class="card-body flex flex-col justify-between">
         <ul class="flex flex-col space-y-3 p-4">
@@ -14,4 +15,7 @@
 </div>
 @code {
     [Parameter] public LuceneReader.SearchResult Result { get; set; }
+    bool Active => State.Value.PreviewHref == Href;
+    string Href => $"Document/{Result.BasePath}";
+    string HeaderBG => Active ? "bg-blue-100 border-t border-r border-l border-b-4 border-blue-400" : "bg-gray-100";
 }

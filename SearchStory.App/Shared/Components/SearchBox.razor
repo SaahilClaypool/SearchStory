@@ -1,9 +1,11 @@
 <div class="flex flex-col items-center flex-auto flex-grow-0 flex-grow">
     <div class="flex items-center">
-        <input class="flex-auto form-control form-control-lg rounded-lg border bg-gray-100 text-xl shadow m-5 p-3" 
+        <input class="flex-auto form-control form-control-lg rounded-lg border bg-gray-100 text-xl shadow m-5 p-3"
             type="text" @oninput="OnInput" placeholder="type to search" autofocus />
-        <svg class="flex-none h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        <svg class="flex-none h-10 w-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
     </div>
 
@@ -18,28 +20,14 @@
     </div>
     <style>
         @*Usinginlinestyleherebecausethehtmlisrawfrombackend*@.highlight {
-            animation-duration: 0.9s;
-            animation-name: fadein;
-            background-color: #5a7d9a33;
-            border-radius: 5px;
-            padding: 3px;
-        }
-
-        @@keyframes fadein {
-            from {
-                background-color: transparent;
-            }
-
-            to {
-                background-color: #5a7d9a33;
-            }
-        }
+            text-decoration: underline;
+            background-color: rgba(219, 234, 254, 1);
         }
     </style>
 </div>
 
 @code {
-    [Inject] LuceneReader Reader { get; set; }
+    [Inject] LuceneReader Reader { get; set; } = null!;
     private string SearchTerm = "";
     private IEnumerable<LuceneReader.SearchResult>? Results = null;
     private void OnInput(ChangeEventArgs ev)

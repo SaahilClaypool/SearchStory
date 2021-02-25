@@ -7,7 +7,7 @@
 
     @foreach (var (fileInfo, index) in Data.WithIndex())
         {
-            <FileLink Href=@Href(fileInfo) Link=@($"{index + 1}. {Href(fileInfo)}") OriginalURL=@Href(fileInfo) />
+            <FileLink Href=@Href(fileInfo) Link=@($"{index + 1}. {Title(fileInfo)}") OriginalURL=@Href(fileInfo) />
         }
     </div>
 }
@@ -21,6 +21,7 @@
     IEnumerable<FileInfo>? Data = null;
 
     string Href(FileInfo fileInfo) => $"Document/{fileInfo.Name}";
+    string Title(FileInfo fileInfo) => fileInfo.Name;
 
     protected override async Task OnInitializedAsync()
     {

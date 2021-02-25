@@ -32,7 +32,6 @@
     private IEnumerable<LuceneReader.SearchResult>? Results = null;
     private void OnInput(ChangeEventArgs ev)
     {
-        Console.WriteLine(ev.Value);
         Results = Reader.Search(ev.Value.ToString());
     }
 }

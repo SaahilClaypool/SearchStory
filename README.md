@@ -26,12 +26,12 @@ There are two use cases:
     - [x] Uses [readability] to parse and save a readable page view
     - [x] Posts data to backend
     - [ ] Published in chrome store
-    - [ ] Visual feedback on article save
+    - [x] Visual feedback on article save
     - [ ] Pull video transcripts?
 - [in progress] Cross platform app
     - [x] Build for windows & linux
     - [x] Writes to appropriate temporary directories
-    - [ ] True single-file exectuable
+    - [x] True single-file exectuable
     - [ ] Close to system tray / run in background
         
         May require hosting as a "real app" rather than console. Or at least a powershell wrapper for windows.

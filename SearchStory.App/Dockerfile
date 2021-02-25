@@ -1,7 +1,5 @@
-# FROM mcr.microsoft.com/dotnet/sdk:5.0
+FROM mcr.microsoft.com/dotnet/sdk:5.0-focal
 
-FROM mcr.microsoft.com/dotnet/sdk:6.0-focal
-# RUN apt update && apt install -y nodejs npm
 ENV NODE_VERSION=12.6.0
 RUN apt install -y curl
 RUN curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash

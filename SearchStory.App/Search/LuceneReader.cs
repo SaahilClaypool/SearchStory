@@ -1,28 +1,23 @@
 using System.IO;
-using System.Threading.Tasks;
 using Lucene.Net.Store;
 using SearchStory.App.Services;
-using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Index;
 using Lucene.Net.Util;
-using SearchStory.App.Search.Transformers;
 using Lucene.Net.Search;
-using Lucene.Net.QueryParsers.Classic;
 using Lucene.Net.Search.Highlight;
-using Lucene.Net.Analysis;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text.Json;
 using System;
 using Lucene.Net.Analysis.En;
+using Lucene.Net.QueryParsers.ComplexPhrase;
 
 namespace SearchStory.App.Search
 {
     public class LuceneReader
     {
         private const int NUMBER_OF_FRAGMENTS = 7;
-        private const int FRAGMENT_SIZE = 80;
+        private const int FRAGMENT_SIZE = 180;
 
         public DirectoryService DirectoryService { get; }
         public LuceneWriter Writer { get; }
@@ -68,18 +63,28 @@ namespace SearchStory.App.Search
 
         private IEnumerable<SearchResult> DoQuery(IndexReader reader, IndexSearcher searcher, string term)
         {
+            Parser.PhraseSlop = 0;
             var query = Parser.Parse(term);
-            System.Console.WriteLine($"Term is {term}");
+            Parser.PhraseSlop = 5;
+            var sloppyQuery = Parser.Parse(term);
+            Parser.PhraseSlop = 0;
+
+            var multiQuery = new BooleanQuery
+            {
+                { query, Occur.SHOULD },
+                { sloppyQuery, Occur.SHOULD }
+            };
+            Console.WriteLine($"Term is {term}");
 
 
             // todo make search after for proper paging
-            var hits = searcher.Search(query, NUMBER_OF_FRAGMENTS);
+            var hits = searcher.Search(multiQuery, NUMBER_OF_FRAGMENTS);
             Highlighter highlighter = new(new SimpleHTMLFormatter("<B class='highlight'>", "</B>"), new QueryScorer(query));
             highlighter.TextFragmenter = new SimpleFragmenter(FRAGMENT_SIZE);
             for (int i = 0; i < hits.ScoreDocs.Length; i++)
             {
                 var doc = reader.Document(hits.ScoreDocs[i].Doc);
-                int maxFragments = 10;
+                int maxFragments = NUMBER_OF_FRAGMENTS;
                 var fragments = highlighter.GetBestFragments(
                         Parser.Analyzer,
                         LuceneDocument.CONTENTS,
@@ -94,14 +99,14 @@ namespace SearchStory.App.Search
 
         }
 
-        private QueryParser _Parser;
-        private QueryParser Parser
+        private ComplexPhraseQueryParser _Parser;
+        private ComplexPhraseQueryParser Parser
         {
             get
             {
                 if (_Parser is null)
                 {
-                    _Parser = new QueryParser(LuceneVersion.LUCENE_48, LuceneDocument.CONTENTS, new EnglishAnalyzer(LuceneVersion.LUCENE_48));
+                    _Parser = new ComplexPhraseQueryParser(LuceneVersion.LUCENE_48, LuceneDocument.CONTENTS, new EnglishAnalyzer(LuceneVersion.LUCENE_48));
                 }
                 return _Parser;
             }

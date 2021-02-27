@@ -16,7 +16,7 @@ namespace SearchStory.App.Search
 {
     public class LuceneReader
     {
-        private const int NUMBER_OF_FRAGMENTS = 7;
+        private const int NUMBER_OF_FRAGMENTS = 15;
         private const int FRAGMENT_SIZE = 180;
 
         public DirectoryService DirectoryService { get; }

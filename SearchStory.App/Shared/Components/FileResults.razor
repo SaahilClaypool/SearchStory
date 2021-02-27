@@ -5,9 +5,29 @@
     </div>
     <div class="card-body flex flex-col justify-between">
         <ul class="flex flex-col space-y-3 p-4">
-            @foreach (var token in Result.HighlightedSnippets)
+            @foreach (var token in Result.HighlightedSnippets.Take(ShownResults))
             {
                 <li class="border-b-2 pb-4">@((MarkupString)token)</li>
+            }
+            @if (OpenPreview)
+            {
+                <button @onclick="TogglePreview" class="flex justify-center">
+                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M5 11l7-7 7 7M5 19l7-7 7 7" />
+                    </svg>
+                </button>
+            }
+            else
+            {
+                <button @onclick="TogglePreview" class="flex justify-center">
+                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 13l-7 7-7-7m14-8l-7 7-7-7" />
+                    </svg>
+                </button>
             }
         </ul>
         <footer class="p-4 text-gray-500">@Result.LastWrite.ToShortDateString()</footer>
@@ -15,6 +35,13 @@
 </div>
 @code {
     [Parameter] public LuceneReader.SearchResult Result { get; set; }
+    bool OpenPreview = false;
+    void TogglePreview()
+    {
+        OpenPreview = !OpenPreview;
+        StateHasChanged();
+    }
+    int ShownResults => OpenPreview ? int.MaxValue : 3;
     bool Active => State.Value.PreviewHref == Href;
     string Href => $"Document/{Result.BasePath}";
     string HeaderBG => Active ? "bg-blue-100 border-t border-r border-l border-b-4 border-blue-400" : "bg-gray-100";

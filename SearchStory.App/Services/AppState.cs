@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Components;
-using SearchStory.App.Shared.Components;
 
 namespace SearchStory.App.Services
 {

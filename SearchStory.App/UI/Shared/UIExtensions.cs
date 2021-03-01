@@ -2,7 +2,7 @@ using System.Collections;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace SearchStory.App.Shared
+namespace SearchStory.App.UI.Shared
 {
     public static class UIExtensions
     {

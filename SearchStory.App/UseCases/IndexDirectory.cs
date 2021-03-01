@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using SearchStory.App.Search;
 using SearchStory.App.Services;
-using SearchStory.App.Shared;
+using SearchStory.App.UI.Shared;
 
 namespace SearchStory.App.UseCases
 {

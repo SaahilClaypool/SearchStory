@@ -4,8 +4,8 @@
     "parcel": "^1.12.4"
   },
   "scripts": {
-    "build": "npx parcel build ./styles.pcss --out-dir ../wwwroot/dist/",
-    "watch": "npx parcel watch ./main.js --out-dir ../wwwroot/dist/"
+    "build": "npx parcel build ./styles.pcss --out-dir ../../wwwroot/dist/",
+    "watch": "npx parcel watch ./main.js --out-dir ../../wwwroot/dist/"
   },
   "dependencies": {
     "autoprefixer": "^9.8.6",

@@ -1,4 +1,24 @@
 <div class="Actions flex flex-col space-y-4 items-center">
+    <div class="flex flex-row">
+        @if (Login.Status)
+        {
+            <svg class="inline-block h-4 w-4 xmlns=" http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd" />
+            </svg>
+        }
+        else
+        {
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <form @onsubmit="TryLogin">
+                <input type="password" style="width: 10ch;" @bind=Password placeholder="Password..."/>
+            </form>
+        }
+    </div>
     <button @onclick="ShowAddFile">
         <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -15,7 +35,9 @@
 </div>
 
 @code {
-    [Inject] StateContainer State { get; set; }
+    [Inject] StateContainer State { get; set; } = null!;
+    [Inject] LoginService Login { get; set; } = null!;
+    string Password = "";
 
     void ShowAddFile()
     {
@@ -25,5 +47,15 @@
     void ShowAddDirectory()
     {
         State.Update(() => State.Value.VisibleControl = AppState.VisibleControlType.AddDirectory);
+    }
+
+    void TryLogin()
+    {
+        Login.LogIn(Password);
+        if (!Login.Status)
+        {
+            Password = "";
+        }
+        StateHasChanged();
     }
 }

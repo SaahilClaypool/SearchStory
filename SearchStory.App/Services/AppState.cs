@@ -5,7 +5,7 @@ namespace SearchStory.App.Services
     public class StateContainer
     {
         public AppState Value { get; set; }
-        public event Action? OnChange;
+        public event Action<string?>? OnChange;
 
         public StateContainer() : this(new()) { }
         public StateContainer(AppState initialState)
@@ -13,10 +13,10 @@ namespace SearchStory.App.Services
             Value = initialState;
         }
 
-        public void Update(Action update)
+        public void Update(Action update, string? key = null)
         {
             update();
-            OnChange?.Invoke();
+            OnChange?.Invoke(key);
         }
     }
 
@@ -31,5 +31,6 @@ namespace SearchStory.App.Services
         public VisibleControlType VisibleControl = VisibleControlType.None;
         public string? PreviewHref { get; set; } = null;
         public string? OriginalHref { get; set; } = null;
+        public bool LoggedIn = false;
     }
 }

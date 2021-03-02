@@ -2,6 +2,7 @@
 @code {
     [CascadingParameter]
     public virtual StateContainer State { get; set; } = null!;
+    [Parameter] public string? Key { get; set; } = null;
     protected override Task OnInitializedAsync()
     {
         if (State != null)
@@ -19,8 +20,11 @@
         }
     }
     
-    public void OnChange()
+    public void OnChange(string? key = null)
     {
-        StateHasChanged();
+        if (Key is null || key == Key)
+        {
+            StateHasChanged();
+        }
     }
 }

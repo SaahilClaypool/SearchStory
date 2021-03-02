@@ -39,7 +39,7 @@
 
   <Target Name="ParcelBeforePublish" 
         BeforeTargets="BeforeBuild">
-    <Exec Command="npm run build --prefix UI/StaticWeb" />
+    <Exec Command="npm install --prefix UI/StaticWeb; npm run build --prefix UI/StaticWeb" />
   </Target>
 
 </Project>

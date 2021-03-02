@@ -24,13 +24,15 @@ namespace SearchStory.App.API
         public AddWebpage WebPageAdder { get; }
         public DirectoryService Dirs { get; }
         public ILogger<AddPageFromBrowser> Logger { get; }
+        public LoginService Login { get; }
 
-        public AddPageFromBrowser(LuceneWriter writer, AddWebpage webPageAdder, DirectoryService dirs, ILogger<AddPageFromBrowser> logger)
+        public AddPageFromBrowser(LuceneWriter writer, AddWebpage webPageAdder, DirectoryService dirs, ILogger<AddPageFromBrowser> logger, LoginService login)
         {
             Writer = writer;
             WebPageAdder = webPageAdder;
             Dirs = dirs;
             Logger = logger;
+            Login = login;
         }
 
         [HttpPost("/api/browser")]
@@ -39,6 +41,11 @@ namespace SearchStory.App.API
             CancellationToken cancellationToken = default
         )
         {
+            if (Login.RequiresPassword)
+            {
+                Logger.LogInformation($"Password required");
+                return BadRequest("Password required");
+            }
             Logger.LogInformation($"Browser has {request.Title}");
             var newFileName = PathifyUrl(request.Title);
             Logger.LogInformation($"turned {request.Title} into {newFileName}");

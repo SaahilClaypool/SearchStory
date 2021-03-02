@@ -1,3 +1,4 @@
+@inherits ReactiveComponent
 <div class="flex flex-col">
     <InputFile multiple OnChange="@OnFileChange" />
     <button class="bg-blue-200 rounded border p-2 text-l bold" @onclick="Execute">Index</button>
@@ -31,8 +32,19 @@
 
     public int Progress() => (int)(indexed * 100.0 / NewFiles.Count());
 
+    protected override async Task OnInitializedAsync()
+    {
+        base.OnInitializedAsync();
+        Key = "LoggedIn";
+    }
+
     public async Task Execute()
     {
+        if (!State.Value.LoggedIn)
+        {
+            State.Update(() => State.Value.ErrorMessage = "Unauthorized");
+            return;
+        }
         if (NewFiles is not null)
         {
             var count = NewFiles.Count();

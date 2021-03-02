@@ -1,3 +1,5 @@
+@inherits ReactiveComponent
+
 <div class="flex flex-col">
     <input class="form-control form-control-sm" type="text" @bind="Folder" placeholder="Folder to add" />
     <button class="bg-blue-200 rounded border p-2 text-l bold" @onclick="Execute">Submit Folder</button>
@@ -23,9 +25,19 @@
     float Progress { get; set; }
     bool ShowProgress { get; set; } = false;
 
+    protected override async Task OnInitializedAsync()
+    {
+        base.OnInitializedAsync();
+        Key = "LoggedIn";
+    }
 
     async Task Execute(EventArgs __ev)
     {
+        if (!State.Value.LoggedIn)
+        {
+            State.Update(() => State.Value.ErrorMessage = "Unauthorized");
+            return;
+        }
         ShowProgress = true;
         try
         {

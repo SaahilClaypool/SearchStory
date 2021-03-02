@@ -1,6 +1,8 @@
+@inherits ReactiveComponent
+
 <div class="Actions flex flex-col space-y-4 items-center">
     <div class="flex flex-row">
-        @if (Login.Status)
+        @if (State.Value.LoggedIn)
         {
             <svg class="inline-block h-4 w-4 xmlns=" http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd"
@@ -35,6 +37,11 @@
 </div>
 
 @code {
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        Key = "LoggedIn";
+    }
     [Inject] StateContainer State { get; set; } = null!;
     [Inject] LoginService Login { get; set; } = null!;
     string Password = "";
@@ -52,10 +59,5 @@
     void TryLogin()
     {
         Login.LogIn(Password);
-        if (!Login.Status)
-        {
-            Password = "";
-        }
-        StateHasChanged();
     }
 }

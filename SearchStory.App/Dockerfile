@@ -12,6 +12,7 @@ RUN node --version
 RUN npm --version
 COPY . /app
 WORKDIR /app
+RUN ["npm", "install", "--prefix", "UI/StaticWeb"]
 RUN ["dotnet", "build", "-r", "linux-x64"]
 ENV DOTNET_USE_POLLING_FILE_WATCHER=true  
 ENV DOTNET_URLS="http://*:5000;https://*:5001"

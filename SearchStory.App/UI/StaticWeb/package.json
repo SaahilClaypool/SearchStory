@@ -1,7 +1,7 @@
 {
   "devDependencies": {
     "cssnano": "^4.1.10",
-    "parcel": "^1.12.4"
+    "parcel": "1.12.3"
   },
   "scripts": {
     "build": "npx parcel build ./styles.pcss --out-dir ../../wwwroot/dist/",

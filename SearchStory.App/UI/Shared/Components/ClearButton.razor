@@ -1,3 +1,4 @@
+@inherits ReactiveComponent
 <button class="btn btn-danger" @onclick="Clear">
     <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -10,6 +11,11 @@
     [Inject] ClearAll ClearAll { get; set; }
     public async Task Clear()
     {
+        if (!State.Value.LoggedIn)
+        {
+            State.Update(() => State.Value.ErrorMessage = "Unauthorized");
+            return;
+        }
         if (!await JSRuntime.InvokeAsync<bool>("confirm", $"Are you sure you want to clear *all* indexed files?"))
         {
             return;

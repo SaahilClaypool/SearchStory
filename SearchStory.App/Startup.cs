@@ -11,7 +11,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using SearchStory.App.Data;
 using SearchStory.App.Search;
 using SearchStory.App.Services;
 using SearchStory.App.UseCases;
@@ -36,7 +35,6 @@ namespace SearchStory.App
                 o.RootDirectory = "/UI/Pages/";
             });
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
             services.AddSingleton<DirectoryService>();
             services.AddScoped<LuceneWriter>();
             services.AddScoped<LuceneReader>();

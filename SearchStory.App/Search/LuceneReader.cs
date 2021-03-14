@@ -99,7 +99,7 @@ namespace SearchStory.App.Search
 
         }
 
-        private ComplexPhraseQueryParser _Parser;
+        private ComplexPhraseQueryParser? _Parser;
         private ComplexPhraseQueryParser Parser
         {
             get

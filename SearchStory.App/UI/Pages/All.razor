@@ -12,11 +12,11 @@
     </div>
 }
 @code {
-    [Inject] ListDocuments ListDocuments { get; set; }
+    [Inject] ListDocuments ListDocuments { get; set; } = null!;
 
-    [Inject] public DirectoryService Dirs { get; set; }
+    [Inject] public DirectoryService Dirs { get; set; } = null!;
 
-    [Inject] ILogger<Add> Logger { get; set; }
+    [Inject] ILogger<Add> Logger { get; set; } = null!;
 
     IEnumerable<FileInfo>? Data = null;
 

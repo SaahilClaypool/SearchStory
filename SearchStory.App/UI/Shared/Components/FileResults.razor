@@ -34,7 +34,7 @@
     </div>
 </div>
 @code {
-    [Parameter] public LuceneReader.SearchResult Result { get; set; }
+    [Parameter] public LuceneReader.SearchResult Result { get; set; } = null!;
     bool OpenPreview = false;
     void TogglePreview()
     {

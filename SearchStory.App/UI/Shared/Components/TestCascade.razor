@@ -5,5 +5,5 @@
 <input type="text" @oninput="UpdateText" />
 
 @code {
-    void UpdateText(ChangeEventArgs ev) => State.Update(() => State.Value.ErrorMessage = ev.Value.ToString());
+    void UpdateText(ChangeEventArgs ev) => State.Update(() => State.Value.ErrorMessage = ev.Value!.ToString());
 }

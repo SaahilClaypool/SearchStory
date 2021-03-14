@@ -24,17 +24,17 @@
     ILogger<Add> Logger { get; set; } = null!;
 
     [Inject]
-    DirectoryService Dirs { get; set; }
+    DirectoryService Dirs { get; set; } = null!;
 
     IEnumerable<IBrowserFile>? NewFiles = null;
 
     int indexed = 0;
 
-    public int Progress() => (int)(indexed * 100.0 / NewFiles.Count());
+    public int Progress() => (int)(indexed * 100.0 / NewFiles!.Count());
 
     protected override async Task OnInitializedAsync()
     {
-        base.OnInitializedAsync();
+        await base.OnInitializedAsync();
         Key = "LoggedIn";
     }
 

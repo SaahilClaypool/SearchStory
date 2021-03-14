@@ -7,8 +7,8 @@
 </button>
 
 @code {
-    [Inject] IJSRuntime JSRuntime { get; set; }
-    [Inject] ClearAll ClearAll { get; set; }
+    [Inject] IJSRuntime JSRuntime { get; set; } = null!;
+    [Inject] ClearAll ClearAll { get; set; } = null!;
     public async Task Clear()
     {
         if (!State.Value.LoggedIn)

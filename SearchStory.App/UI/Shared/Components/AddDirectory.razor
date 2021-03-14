@@ -17,8 +17,7 @@
 </div>
 
 @code {
-    [Inject] IndexDirectoryUseCase IndexDirectory { get; set; }
-    [Inject] StateContainer State { get; set; }
+    [Inject] IndexDirectoryUseCase IndexDirectory { get; set; } = null!;
 
     string Folder { get; set; } = "";
 
@@ -27,7 +26,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        base.OnInitializedAsync();
+        await base.OnInitializedAsync();
         Key = "LoggedIn";
     }
 

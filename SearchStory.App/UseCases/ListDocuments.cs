@@ -25,12 +25,14 @@ namespace SearchStory.App.UseCases
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<Response> Execute(Command input)
+        public Task<Response> Execute(Command input)
         {
             var dir = DirService.DocumentDir;
-            return new(dir.GetFiles()
+            return Task.FromResult<Response>(
+                new(dir.GetFiles()
                 .OrderByDescending(f => f.CreationTime) // Most recent first
-                .Skip(input.Page * input.PageSize).Take(input.PageSize));
+                .Skip(input.Page * input.PageSize).Take(input.PageSize))
+            );
         }
     }
 }

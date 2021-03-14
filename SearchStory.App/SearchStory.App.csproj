@@ -6,6 +6,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <PublishSingleFile Condition="'$(Configuration)' == 'Release' ">true</PublishSingleFile>
     <SelfContained Condition="'$(Configuration)' == 'Release' ">true</SelfContained>

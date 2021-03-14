@@ -42,7 +42,6 @@
         await base.OnInitializedAsync();
         Key = "LoggedIn";
     }
-    [Inject] StateContainer State { get; set; } = null!;
     [Inject] LoginService Login { get; set; } = null!;
     string Password = "";
 

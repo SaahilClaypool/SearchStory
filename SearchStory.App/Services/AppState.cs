@@ -32,5 +32,12 @@ namespace SearchStory.App.Services
         public string? PreviewHref { get; set; } = null;
         public string? OriginalHref { get; set; } = null;
         public bool LoggedIn = false;
+        public readonly bool CanQuit =
+            #if Windows
+            true
+            #else
+            false
+            #endif
+        ;
     }
 }

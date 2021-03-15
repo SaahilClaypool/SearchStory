@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using SearchStory.App.Search;
 using SearchStory.App.Services;
 using SearchStory.App.UseCases;
+using SearchStory.App.Platform;
 
 namespace SearchStory.App
 {
@@ -113,6 +114,9 @@ namespace SearchStory.App
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+            
+            var iconManager = new SystemTrayIconManager();
+            iconManager.Instantiate().Wait();
         }
     }
 }

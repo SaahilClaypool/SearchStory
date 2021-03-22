@@ -41,9 +41,11 @@ This is currently deployed in a small digital ocean droplet behind an NGINX reve
     - [x] Build for windows & linux
     - [x] Writes to appropriate temporary directories
     - [x] True single-file exectuable
-    - [ ] Close to system tray / run in background
+    - [x] Close to system tray / run in background
         
         May require hosting as a "real app" rather than console. Or at least a powershell wrapper for windows.
+        
+        (Windows only currently - cross platform could be added)
 
     - [ ] use blazor webview
 

@@ -1,0 +1,28 @@
+<div class="flex flex-grow flex-col justify-between">
+    <form class="flex flex-col bg-gray space-y-4" @onsubmit="async () => await TryLogin()">
+        <input type="text" style="width: 20ch;" @bind=username placeholder="username" />
+        <input type="password" style="width: 20ch;" @bind=password placeholder="password" />
+        <input type="submit" value="login"/>
+    </form>
+    <p>Hit x to use the public account</p>
+</div>
+
+@code {
+    [Inject] LoginService Login { get; set; } = null!;
+    [CascadingParameter] BlazoredModalInstance ModalInstance { get; set; } = null!;
+
+
+    string username = "";
+    string password = "";
+    async Task TryLogin()
+    {
+        Console.WriteLine("Submitting");
+        if (await Login.LogIn(username, password))
+        {
+            await ModalInstance.CloseAsync();
+        }
+        else {
+            Console.WriteLine("Failed\n");
+        }
+    }
+}

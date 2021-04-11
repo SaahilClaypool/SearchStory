@@ -41,10 +41,11 @@
           https://github.com/dotnet/aspnetcore/issues/26862 
           https://github.com/dotnet/aspnetcore/issues/26884
     -->
-    <EmbeddedResource Include="wwwroot/**" Watch="false"/>
+    <EmbeddedResource Include="wwwroot/**" Watch="false" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Blazored.Modal" Version="6.0.1" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.30" />
     <PackageReference Include="Lucene.Net" Version="4.8.0-beta00013" />
     <PackageReference Include="Lucene.Net.Analysis.Common" Version="4.8.0-beta00013" />
@@ -58,8 +59,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.0-preview.3.21201.2" />
   </ItemGroup>
 
-  <Target Name="ParcelBeforePublish" 
-        BeforeTargets="BeforeBuild">
+  <Target Name="ParcelBeforePublish" BeforeTargets="BeforeBuild">
     <Exec Command="npm run build --prefix UI/StaticWeb" />
   </Target>
 

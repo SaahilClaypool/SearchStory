@@ -18,6 +18,7 @@ using SearchStory.App.Platform;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Components.Authorization;
+using Blazored.Modal;
 
 namespace SearchStory.App
 {
@@ -34,6 +35,8 @@ namespace SearchStory.App
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddBlazoredModal();
+
             services.AddDbContext<AppDbContext>(
                 options =>
                 options.UseSqlite(
@@ -83,9 +86,14 @@ namespace SearchStory.App
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                ScopedSetup(serviceScope);
+            }
 
             // app.UseHttpsRedirection();
-            System.Console.WriteLine(string.Join("\n\t", typeof(Program).Assembly.GetManifestResourceNames()));
+            // System.Console.WriteLine(string.Join("\n\t", typeof(Program).Assembly.GetManifestResourceNames()));
             app.UseStaticFiles();
             try
             {
@@ -136,6 +144,12 @@ namespace SearchStory.App
 
             var iconManager = new SystemTrayIconManager();
             iconManager.Instantiate().Wait();
+        }
+        
+        void ScopedSetup(IServiceScope scope)
+        {
+            var login = scope.ServiceProvider.GetService<LoginService>()!;
+            login.SeedUsers();
         }
     }
 }

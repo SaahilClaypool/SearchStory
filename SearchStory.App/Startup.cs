@@ -15,6 +15,9 @@ using SearchStory.App.Search;
 using SearchStory.App.Services;
 using SearchStory.App.UseCases;
 using SearchStory.App.Platform;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Components.Authorization;
 
 namespace SearchStory.App
 {
@@ -31,10 +34,22 @@ namespace SearchStory.App
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages(o => 
+            services.AddDbContext<AppDbContext>(
+                options =>
+                options.UseSqlite(
+                    Configuration.GetConnectionString("DefaultConnection"))
+            );
+            services.AddDefaultIdentity<IdentityUser>(options => { })
+                .AddEntityFrameworkStores<AppDbContext>();
+
+
+            services.AddRazorPages(o =>
             {
                 o.RootDirectory = "/UI/Pages/";
             });
+
+            services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+
             services.AddServerSideBlazor();
             services.AddSingleton<DirectoryService>();
             services.AddScoped<LuceneWriter>();
@@ -106,6 +121,10 @@ namespace SearchStory.App
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+            // serviceProvider is app.ApplicationServices from Configure(IApplicationBuilder app) method
+
             app.UseCors();
 
             app.UseEndpoints(endpoints =>
@@ -114,7 +133,7 @@ namespace SearchStory.App
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
-            
+
             var iconManager = new SystemTrayIconManager();
             iconManager.Instantiate().Wait();
         }

@@ -3,12 +3,23 @@
 
 @if (Data is not null)
 {
-    <div class="flex flex-col space-y-4">
+    <div class="flex flex-grow flex-col justify-between">
 
-    @foreach (var (fileInfo, index) in Data.WithIndex())
-        {
-            <FileLink Href=@Href(fileInfo) Link=@($"{index + 1}. {Title(fileInfo)}") OriginalURL=@Href(fileInfo) />
-        }
+        <ul>
+            @foreach (var (fileInfo, index) in Data.WithIndex())
+            {
+                <li>
+                    <FileLink Href=@Href(fileInfo) Link=@($"{index + 1}. {Title(fileInfo)}") OriginalURL=@Href(fileInfo) />
+                </li>
+            }
+        </ul>
+        <div class="self-end flex flex-col items-center flex-0">
+            <div class="flex items-center space-x-10">
+                <button @onclick=Prev>Prev</button>
+                <div>@pageNumber</div>
+                <button @onclick=Next>Next</button>
+            </div>
+        </div>
     </div>
 }
 @code {
@@ -22,9 +33,27 @@
 
     string Href(FileInfo fileInfo) => $"Document/{fileInfo.Name}";
     string Title(FileInfo fileInfo) => fileInfo.Name;
+    int pageNumber = 0;
+    int pageSize = 10;
+    
+    async Task Prev() 
+    {
+        pageNumber = --pageNumber < 0 ? 0 : pageNumber;
+        await LoadData();
+    }
+    async Task Next()
+    {
+        if (Data?.Count() >= pageSize)
+        {
+            pageNumber = ++pageNumber;
+        }
+        await LoadData();
+    }
+    
+    async Task LoadData() => Data = (await ListDocuments.Execute(new(pageNumber, pageSize))).Files;
 
     protected override async Task OnInitializedAsync()
     {
-        Data = (await ListDocuments.Execute(new())).Files;
+        await LoadData();
     }
 }

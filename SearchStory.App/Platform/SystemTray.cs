@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.FileProviders;
 namespace SearchStory.App.Platform
 {
-#if Windows
+#if Windows && DEBUG != true
     using System.Windows.Forms;
     using System.Diagnostics;
     public class SystemTrayIconManager : ITrayManager

@@ -13,6 +13,9 @@ namespace SearchStory.App
     {
         public static void Main(string[] args)
         {
+            #if DEBUG
+                System.Console.WriteLine("DEBUG");
+            #endif
             CreateHostBuilder(args).Build().Run();
         }
 

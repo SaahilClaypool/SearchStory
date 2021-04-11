@@ -28,6 +28,13 @@ There are two use cases:
 
 This is currently deployed in a small digital ocean droplet behind an NGINX reverse proxy.
 
+## In progress
+
+- User Accounts:
+    - Add asp.net core identity
+    - Add sqlite 
+- Split project into different parts of windows & server?
+
 ## Development Ideas
 
 - [in progress] Browser extension

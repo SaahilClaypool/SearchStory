@@ -17,4 +17,13 @@
 
 @code {
     [Inject] public StateContainer State { get; set; } = null!;
+    [Inject] public LoginService loginService { get; set; } = null!;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        if (! (await loginService.RequiresPassword()))
+        {
+            State.Update(() => State.Value.LoggedIn = true);
+        }
+    }
 }

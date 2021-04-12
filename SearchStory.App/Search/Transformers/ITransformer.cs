@@ -7,6 +7,6 @@ namespace SearchStory.App.Search.Transformers
 {
     public interface ITransformer
     {
-        (string Key, Document Document, IEnumerable<IDisposable> Disposables) Transform(FileInfo file);
+        (string Key, Document Document, IEnumerable<IDisposable> Disposables) Transform(FileInfo file, string? username);
     }
 }

@@ -14,7 +14,7 @@ namespace SearchStory.App.Search.Transformers
     /// </summary>
     public class PDFTransformer : ITransformer
     {
-        public (string Key, Document Document, IEnumerable<IDisposable> Disposables) Transform(FileInfo file)
+        public (string Key, Document Document, IEnumerable<IDisposable> Disposables) Transform(FileInfo file, string? username)
         {
             using PdfDocument document = PdfDocument.Open(file.FullName);
             var words = document
@@ -23,7 +23,7 @@ namespace SearchStory.App.Search.Transformers
                 .Select(w => w.Text);
             var text = string.Join(" ", words);
             FileStream fs = new(file.FullName, FileMode.Open, FileAccess.Read);
-            var doc = LuceneDocument.New(path: file.FullName, contents: text);
+            var doc = LuceneDocument.New(path: file.FullName, contents: text, username: username);
             return (file.FullName, doc, new List<IDisposable> { fs });
         }
     }

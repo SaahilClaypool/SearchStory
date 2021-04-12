@@ -28,9 +28,10 @@
 
 @code {
     [Inject] LuceneReader Reader { get; set; } = null!;
+    [Inject] StateContainer State { get; set; } = null!;
     private IEnumerable<LuceneReader.SearchResult>? Results = null;
     private void OnInput(ChangeEventArgs ev)
     {
-        Results = Reader.Search(ev.Value!.ToString()!);
+        Results = Reader.Search(ev.Value!.ToString()!, State.Value.User?.UserName);
     }
 }

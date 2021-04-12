@@ -29,7 +29,7 @@ namespace SearchStory.App.UseCases
                 var file = new FileInfo(DirService.DocumentDir.FullName + Path.GetFileName(newFileName));
                 Logger.LogInformation($"Moving {newFileName} to {file}");
                 File.Move(newFileName, file.ToString(), overwrite: true);
-                await SearchIndex.AddFile(file, false);
+                await SearchIndex.AddFile(file, null, false);
                 yield return newFileName;
             }
             SearchIndex.Flush();

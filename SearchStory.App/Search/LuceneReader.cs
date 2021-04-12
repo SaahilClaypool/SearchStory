@@ -44,7 +44,7 @@ namespace SearchStory.App.Search
         /// https://github.com/Mpdreamz/lucene.net/blob/master/C%23/contrib/Highlighter.Net/Test/HighlighterTest.cs
         /// </summary>
         /// <param name="term">query to search lucene index for</param>
-        public IEnumerable<SearchResult> Search(string term)
+        public IEnumerable<SearchResult> Search(string term, string? username)
         {
             if (term == "") return new List<SearchResult>();
             using var reader = DirectoryReader.Open(FSDirectory.Open(DirectoryService.IndexDir));
@@ -52,7 +52,7 @@ namespace SearchStory.App.Search
 
             try
             {
-                return DoQuery(reader, searcher, term).ToList();
+                return DoQuery(reader, searcher, term, username).ToList();
             }
             catch(Exception e)
             {
@@ -61,7 +61,7 @@ namespace SearchStory.App.Search
             }
         }
 
-        private IEnumerable<SearchResult> DoQuery(IndexReader reader, IndexSearcher searcher, string term)
+        private IEnumerable<SearchResult> DoQuery(IndexReader reader, IndexSearcher searcher, string term, string? username)
         {
             Parser.PhraseSlop = 0;
             var query = Parser.Parse(term);
@@ -75,6 +75,10 @@ namespace SearchStory.App.Search
                 { sloppyQuery, Occur.SHOULD }
             };
             Console.WriteLine($"Term is {term}");
+            if (username is not null)
+            {
+                multiQuery.Add(new TermQuery(new Term(LuceneDocument.USERNAME, username)), Occur.MUST);
+            }
 
 
             // todo make search after for proper paging

@@ -12,7 +12,7 @@ namespace SearchStory.App.UseCases
 {
     public class IndexDirectoryUseCase
     {
-        public record Command(string DirectoryName);
+        public record Command(string DirectoryName, string? UserName);
         public record Response();
         public ILogger<AddDocuments> Logger { get; }
         public DirectoryService DirService { get; }
@@ -47,7 +47,7 @@ namespace SearchStory.App.UseCases
                     {
                         await remoteFile.CopyToAsync(localFile);
                     }
-                    await SearchIndex.AddFile(new FileInfo(localFilePath), flush: false);
+                    await SearchIndex.AddFile(new FileInfo(localFilePath), command.UserName, flush: false);
                 }
                 catch (Exception e)
                 {

@@ -8,7 +8,7 @@ namespace SearchStory.App.UseCases
 {
     public class AddWebpage : IUseCase<AddWebpage.Command, AddWebpage.Response>
     {
-        public record Command(string NewFileName, string Url, string RawContent);
+        public record Command(string NewFileName, string Url, string RawContent, string? UserName);
         public record Response();
         public ILogger<AddWebpage> Logger { get; }
         public DirectoryService DirService { get; }
@@ -23,7 +23,7 @@ namespace SearchStory.App.UseCases
 
         public async Task<Response> Execute(Command input)
         {
-            await SearchIndex.AddWebpage(input.NewFileName, input.Url, input.RawContent);
+            await SearchIndex.AddWebpage(input.NewFileName, input.Url, input.RawContent, input.UserName);
             return new();
         }
     }

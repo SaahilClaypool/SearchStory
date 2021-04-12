@@ -41,7 +41,7 @@ namespace SearchStory.App.API
             CancellationToken cancellationToken = default
         )
         {
-            if (Login.RequiresPassword)
+            if (await Login.RequiresPassword())
             {
                 Logger.LogInformation($"Password required");
                 return BadRequest("Password required");
@@ -54,7 +54,8 @@ namespace SearchStory.App.API
             Logger.LogInformation($"local file {localFilePath}");
             await System.IO.File.WriteAllTextAsync(localFilePath, request.Content, cancellationToken);
             var rawText = TextifyHtml(request.Content);
-            await WebPageAdder.Execute(new(localFilePath, request.Url, rawText));
+            // TODO: username here
+            await WebPageAdder.Execute(new(localFilePath, request.Url, rawText, null));
             return Ok(new());
         }
 

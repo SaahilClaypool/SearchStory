@@ -13,10 +13,10 @@ namespace SearchStory.App.Search.Transformers
     /// </summary>
     public class TextTransformer : ITransformer
     {
-        public (string Key, Document Document, IEnumerable<IDisposable> Disposables) Transform(FileInfo file)
+        public (string Key, Document Document, IEnumerable<IDisposable> Disposables) Transform(FileInfo file, string? username)
         {
             FileStream fs = new(file.FullName, FileMode.Open, FileAccess.Read);
-            var doc = LuceneDocument.New(path: file.FullName, contents: new StreamReader(fs, Encoding.UTF8).ReadToEnd());
+            var doc = LuceneDocument.New(path: file.FullName, contents: new StreamReader(fs, Encoding.UTF8).ReadToEnd(), username: username);
             return (file.FullName, doc, new List<IDisposable> { fs });
         }
     }

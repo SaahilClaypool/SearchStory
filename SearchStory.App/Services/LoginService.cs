@@ -14,9 +14,9 @@ namespace SearchStory.App.Services
 
         StateContainer State { get; set; } = null!;
         public AppDbContext Db { get; }
-        UserManager<IdentityUser> userManager = null!; 
+        readonly UserManager<IdentityUser> userManager = null!; 
 
-        public bool RequiresPassword => !(PassPhrase is null or "");
+        public async Task<bool> RequiresPassword() => await Db.Users.AnyAsync();
         public LoginService(StateContainer container, SignInManager<IdentityUser> signInManager, AppDbContext db, UserManager<IdentityUser> userManager)
         {
             State = container;
@@ -24,7 +24,6 @@ namespace SearchStory.App.Services
             Db = db;
             this.userManager = userManager;
         }
-        private static string? PassPhrase => Environment.GetEnvironmentVariable("PASSWORD");
 
         public async Task<bool> LogIn(string username, string password)
         {
@@ -65,6 +64,12 @@ namespace SearchStory.App.Services
                 {
                     System.Console.WriteLine($"User {user.Username} already exists");
                 }
+            }
+            
+            if (!Db.Users.Any())
+            {
+                // we can make a single admin user... only for local
+                userManager.CreateAsync(new() { UserName = "" }, "").Wait();
             }
         }
     }

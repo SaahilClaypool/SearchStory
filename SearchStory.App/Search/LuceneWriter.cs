@@ -29,11 +29,11 @@ namespace SearchStory.App.Search
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        public Task AddFile(FileInfo file, bool flush = true)
+        public Task AddFile(FileInfo file, string? username, bool flush = true)
         {
             return Task.Run(() =>
             {
-                var (key, doc, disposables) = new Transformer().Transform(file);
+                var (key, doc, disposables) = new Transformer().Transform(file, username);
                 Write(doc, flush);
                 foreach (var d in disposables)
                 {
@@ -50,12 +50,12 @@ namespace SearchStory.App.Search
             Writer = null!; // it'll regenerate as needed
         }
 
-        public Task AddWebpage(string localFilename, string url, string textContent)
+        public Task AddWebpage(string localFilename, string url, string textContent, string? username)
         {
             return Task.Run(() =>
             {
                 var localFile = new FileInfo(localFilename);
-                var doc = LuceneDocument.Web(localFilename, textContent, url);
+                var doc = LuceneDocument.Web(localFilename, textContent, url, username);
                 Write(doc, true);
             });
         }

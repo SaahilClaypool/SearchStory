@@ -8,11 +8,11 @@ namespace SearchStory.App.Search.Transformers
 {
     public class Transformer : ITransformer
     {
-        public (string Key, Document Document, IEnumerable<IDisposable> Disposables) Transform(FileInfo file)
+        public (string Key, Document Document, IEnumerable<IDisposable> Disposables) Transform(FileInfo file, string? username)
             => file.Extension.ToLower() switch
             {
-                ".pdf" => new PDFTransformer().Transform(file),
-                _ => new TextTransformer().Transform(file)
+                ".pdf" => new PDFTransformer().Transform(file, username),
+                _ => new TextTransformer().Transform(file, username)
             };
     }
 }

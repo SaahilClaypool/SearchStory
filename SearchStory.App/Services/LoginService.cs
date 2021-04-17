@@ -33,11 +33,6 @@ namespace SearchStory.App.Services
             var result = await signInManager.CheckPasswordSignInAsync(user, password, lockoutOnFailure: false);
             if (result.Succeeded)
             {
-                State.Update(() => 
-                { 
-                    State.Value.LoggedIn = true;
-                    State.Value.User = user;
-                }, "LoggedIn");
                 return  true;
             }
             return false;

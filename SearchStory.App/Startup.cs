@@ -19,6 +19,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Components.Authorization;
 using Blazored.Modal;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using System.Net.Http;
 
 namespace SearchStory.App
 {
@@ -42,8 +45,6 @@ namespace SearchStory.App
                 options.UseSqlite(
                     Configuration.GetConnectionString("DefaultConnection"))
             );
-            services.AddDefaultIdentity<IdentityUser>(options => { })
-                .AddEntityFrameworkStores<AppDbContext>();
 
 
             services.AddRazorPages(o =>
@@ -51,7 +52,18 @@ namespace SearchStory.App
                 o.RootDirectory = "/UI/Pages/";
             });
 
+            #region Auth
+            services.AddDefaultIdentity<IdentityUser>(options => { })
+                .AddEntityFrameworkStores<AppDbContext>();
+            services.AddAuthentication(
+                CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+            services.AddHttpContextAccessor();
+            services.AddScoped<HttpContextAccessor>();
+            services.AddHttpClient();
+            services.AddScoped<HttpClient>();
+            #endregion
 
             services.AddServerSideBlazor();
             services.AddSingleton<DirectoryService>();
@@ -91,6 +103,11 @@ namespace SearchStory.App
             {
                 ScopedSetup(serviceScope);
             }
+            #region Cookie // https://blazorhelpwebsite.com/ViewBlogPost/36
+            System.Console.WriteLine("Setting cookies");
+            app.UseCookiePolicy();
+            app.UseAuthentication();
+            #endregion
 
             // app.UseHttpsRedirection();
             // System.Console.WriteLine(string.Join("\n\t", typeof(Program).Assembly.GetManifestResourceNames()));

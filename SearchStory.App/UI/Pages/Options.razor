@@ -1,27 +1,45 @@
 @page "/Options"
 @inherits ReactiveComponent
 
-@if(State.Value.CanQuit) {
-    <button @onclick="Quit" >Quit</button>
-}
+<div class="flex flex-col">
+
+    <div>
+        <button @onclick="TogglePreview">Preview: @State.Value.AutoPreviewFirstResult</button>
+    </div>
+
+    @if (State.Value.CanQuit)
+    {
+        <div>
+            <button @onclick="Quit">Quit</button>
+        </div>
+
+    }
+</div>
 
 @code {
+
     [Inject] NavigationManager Nav { get; set; } = null!;
     [Inject] IJSRuntime JSRuntime { get; set; } = null!;
-    
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
+
         if (!State.Value.LoggedIn)
         {
-            Nav.NavigateTo("#");
+            Nav.NavigateTo("/");
         }
     }
-    
+
     private async Task Quit()
     {
         Console.WriteLine("closing window");
         await JSRuntime.InvokeVoidAsync("close");
         Environment.Exit(0);
+    }
+
+    private void TogglePreview()
+    {
+        State.Update(s => s.AutoPreviewFirstResult = !s.AutoPreviewFirstResult);
     }
 }

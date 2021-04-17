@@ -1,9 +1,21 @@
 @inherits ReactiveComponent
 
+@using SearchStory.App.API
+@using System.Net.Http
+@using System.Net.Http.Json
+@using System.Security.Claims;
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+@inject NavigationManager UriHelper
+@inject HttpClient Http
+
 <div class="Actions flex flex-col space-y-4 items-center">
     @if (State.Value.User is not null)
     {
-        <p>Logged in as: @State.Value.User.UserName</p>
+        <button @onclick="ShowLoginModal">
+            <p>Logged in as: @State.Value.User.Identity.Name</p>
+        </button>
     }
     <div class="flex flex-row">
         @if (State.Value.LoggedIn)
@@ -20,7 +32,7 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <button @onclick="ShowModal">
+            <button @onclick="ShowLoginModal">
                 Login
             </button>
         }
@@ -45,6 +57,15 @@
     {
         await base.OnInitializedAsync();
         Key = "LoggedIn";
+        var user = await GetClaimsPrincipalData();
+        if (user.Identity.IsAuthenticated)
+        {
+            State.Update(s => 
+            {
+                s.User  = user; 
+                s.LoggedIn = true;
+            });
+        }
     }
     [Inject] LoginService Login { get; set; } = null!;
     string Password = "";
@@ -61,9 +82,16 @@
         State.Update(() => State.Value.VisibleControl = AppState.VisibleControlType.AddDirectory);
     }
 
-    void ShowModal()
+    void ShowLoginModal()
     {
         var parameters = new ModalParameters();
-        Modal.Show<LoginForm>("Login");
+        Modal.Show<LoginControl >("Login");
+    }
+
+    private async Task<ClaimsPrincipal> GetClaimsPrincipalData()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        return user;
     }
 }

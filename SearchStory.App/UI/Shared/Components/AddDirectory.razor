@@ -40,7 +40,7 @@
         ShowProgress = true;
         try
         {
-            await foreach (var progress in IndexDirectory.Execute(new(Folder, State.Value.User?.UserName)))
+            await foreach (var progress in IndexDirectory.Execute(new(Folder, State.Value.User.Identity.Name)))
             {
                 Progress = progress;
                 StateHasChanged();

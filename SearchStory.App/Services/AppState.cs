@@ -1,5 +1,6 @@
 using System;
 using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
 
 namespace SearchStory.App.Services
 {
@@ -19,6 +20,12 @@ namespace SearchStory.App.Services
             update();
             OnChange?.Invoke(key);
         }
+        
+        public void Update(Action<AppState> update, string? key = null)
+        {
+            update(Value);
+            OnChange?.Invoke(key);
+        }
     }
 
     public class AppState
@@ -33,7 +40,8 @@ namespace SearchStory.App.Services
         public string? PreviewHref { get; set; } = null;
         public string? OriginalHref { get; set; } = null;
         public bool LoggedIn = false;
-        public IdentityUser? User = null;
+        public ClaimsPrincipal? User = null;
+        public bool AutoPreviewFirstResult = true;
         public readonly bool CanQuit =
             #if Windows
             true

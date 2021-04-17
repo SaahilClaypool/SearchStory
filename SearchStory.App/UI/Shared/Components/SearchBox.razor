@@ -27,6 +27,8 @@
 </div>
 
 @code {
+    const int PREVIEW_DELAY_MS = 600;
+    const int SEARCH_DELAY_MS = 200;
     string currentQuery = "";
     [Inject] LuceneReader Reader { get; set; } = null!;
     [Inject] StateContainer State { get; set; } = null!;
@@ -34,6 +36,16 @@
     private async Task OnInput(ChangeEventArgs ev)
     {
         var query = ev.Value!.ToString()!;
+        currentQuery = query;
+        await Task.Delay(SEARCH_DELAY_MS);
+        
+        // debounce - exit early if query has changed
+        if (currentQuery != query)
+        {
+            return;
+        }
+
+
         var results = Reader.Search(query, State.Value.User?.Identity?.Name);
         if (results.Any(r => r.HighlightedSnippets.Count() > 0)) // At least one result needs highlights
         {
@@ -47,8 +59,7 @@
         
         if (Results?.FirstOrDefault() is LuceneReader.SearchResult result && State.Value.AutoPreviewFirstResult)
         {
-            currentQuery = query;
-            await Task.Delay(500);
+            await Task.Delay(PREVIEW_DELAY_MS - SEARCH_DELAY_MS);
             if (currentQuery == query)
             {
                 // only update preview if no new query has been made since timer started

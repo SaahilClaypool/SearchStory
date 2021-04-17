@@ -1,20 +1,27 @@
 @page "/loginControl"
+@inject NavigationManager UriHelper
 @using System.Web;
 <AuthorizeView>
     <Authorized>
         <b>Hello, @context?.User?.Identity?.Name!</b>
-        <a class="ml-md-auto btn btn-primary" href="/logout?returnUrl=/" target="_top">Logout</a>
+        <a class="ml-md-auto btn btn-primary" href=@logoutUrl target="_top">Logout</a>
     </Authorized>
     <NotAuthorized>
         <input type="text" placeholder="User Name" @bind="@Username" />
         &nbsp;&nbsp;
         <input type="password" placeholder="Password" @bind="@Password" />
         <a class="ml-md-auto btn btn-primary"
-            href="/login?paramUsername=@encode(@Username)&paramPassword=@encode(@Password)" target="_top">Login</a>
+            href=@loginUrl target="_top">Login</a>
     </NotAuthorized>
 </AuthorizeView>
 
 @code {
+
+    string loginUrl =>
+        UriHelper.BaseUri + $"login?paramUsername={encode(Username)}&paramPassword={encode(Password)}";
+        
+    string logoutUrl =>
+        UriHelper.BaseUri + $"logout?returnUrl=" + UriHelper.BaseUri;
 
     string Username = "";
     string Password = "";

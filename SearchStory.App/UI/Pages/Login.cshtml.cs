@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SearchStory.App.Services;
@@ -20,9 +21,10 @@ namespace BlazorCookieAuth.Server.Pages
         }
         public LoginService Login { get; }
 
-        public async Task<IActionResult> OnGetAsync(string paramUsername, string paramPassword)
+        public async Task<IActionResult> OnGetAsync(string paramUsername, string paramPassword, [FromServices] NavigationManager UriHelper)
         {
             string returnUrl = Url.Content("~/");
+            
             try
             {
                 // Clear the existing external cookie

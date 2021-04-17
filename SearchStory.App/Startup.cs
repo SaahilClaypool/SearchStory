@@ -84,7 +84,7 @@ namespace SearchStory.App
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext db)
         {
             app.UsePathBase("/searchstory");
             new DirectoryService().EnsurePathsExist();
@@ -97,6 +97,15 @@ namespace SearchStory.App
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+            }
+            db.Database.EnsureCreated();
+            try 
+            {
+                db.Database.Migrate();
+            }
+            catch 
+            {
+                Console.WriteLine("No migrations could be added");
             }
             
             using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())

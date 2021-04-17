@@ -9,7 +9,7 @@ namespace SearchStory.App.UseCases
 {
     public class AddDocuments
     {
-        public record Command(List<string> NewFileNames, bool Flush = true);
+        public record Command(List<string> NewFileNames, string? Username, bool Flush = true);
         public record Response();
         public ILogger<AddDocuments> Logger { get; }
         public DirectoryService DirService { get; }
@@ -29,7 +29,7 @@ namespace SearchStory.App.UseCases
                 var file = new FileInfo(DirService.DocumentDir.FullName + Path.GetFileName(newFileName));
                 Logger.LogInformation($"Moving {newFileName} to {file}");
                 File.Move(newFileName, file.ToString(), overwrite: true);
-                await SearchIndex.AddFile(file, null, false);
+                await SearchIndex.AddFile(file, input.Username, false);
                 yield return newFileName;
             }
             SearchIndex.Flush();

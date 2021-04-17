@@ -74,7 +74,7 @@ namespace SearchStory.App.Search
                 { query, Occur.SHOULD },
                 { sloppyQuery, Occur.SHOULD }
             };
-            Console.WriteLine($"Term is {term}");
+            Console.WriteLine($"Term is {term} - {username}");
             if (username is not null)
             {
                 multiQuery.Add(new TermQuery(new Term(LuceneDocument.USERNAME, username)), Occur.MUST);

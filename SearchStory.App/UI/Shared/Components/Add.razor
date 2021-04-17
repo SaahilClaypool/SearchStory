@@ -66,7 +66,7 @@
             }
 
             index = 0;
-            await foreach (var result in DocumentAdder.Execute(new(files)))
+            await foreach (var result in DocumentAdder.Execute(new(files, State.Value.User?.Identity?.Name)))
             {
                 indexed = index++ + 1;
                 StateHasChanged();

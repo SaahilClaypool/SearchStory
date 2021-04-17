@@ -34,11 +34,16 @@
     private async Task OnInput(ChangeEventArgs ev)
     {
         var query = ev.Value!.ToString()!;
-        Results = Reader.Search(query, State.Value.User.Identity.Name);
-        if (!Results.Any(r => r.HighlightedSnippets.Count() > 0)) // At least one result needs highlights
+        var results = Reader.Search(query, State.Value.User?.Identity?.Name);
+        if (results.Any(r => r.HighlightedSnippets.Count() > 0)) // At least one result needs highlights
+        {
+            Results = results;
+        }
+        if (string.IsNullOrEmpty(query))
         {
             Results = null;
         }
+
         
         if (Results?.FirstOrDefault() is LuceneReader.SearchResult result && State.Value.AutoPreviewFirstResult)
         {

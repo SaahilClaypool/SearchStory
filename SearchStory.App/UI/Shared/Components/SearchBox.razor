@@ -27,11 +27,28 @@
 </div>
 
 @code {
+    string currentQuery = "";
     [Inject] LuceneReader Reader { get; set; } = null!;
     [Inject] StateContainer State { get; set; } = null!;
     private IEnumerable<LuceneReader.SearchResult>? Results = null;
-    private void OnInput(ChangeEventArgs ev)
+    private async Task OnInput(ChangeEventArgs ev)
     {
-        Results = Reader.Search(ev.Value!.ToString()!, State.Value.User.Identity.Name);
+        var query = ev.Value!.ToString()!;
+        Results = Reader.Search(query, State.Value.User.Identity.Name);
+        if (!Results.Any(r => r.HighlightedSnippets.Count() > 0)) // At least one result needs highlights
+        {
+            Results = null;
+        }
+        
+        if (Results?.FirstOrDefault() is LuceneReader.SearchResult result && State.Value.AutoPreviewFirstResult)
+        {
+            currentQuery = query;
+            await Task.Delay(500);
+            if (currentQuery == query)
+            {
+                // only update preview if no new query has been made since timer started
+                State.Update(s => s.PreviewHref = $"Document/{result.BasePath}");
+            }
+        }
     }
 }
